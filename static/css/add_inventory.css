@@ -1,0 +1,150 @@
+body {
+  background-color: #51b2fa;
+  color: #fff;
+}
+
+/* Set container width and margins */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Set maximum width and margin for logo image */
+.logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Style for button elements */
+.button {
+  background-color: #fff;
+  color: #51b2fa;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Set button hover styles */
+.button:hover {
+  background-color: #51b2fa;
+  color: #fff;
+}
+
+/* Set display properties for options container */
+.options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Set margin-bottom for each option */
+.option {
+  margin-bottom: 20px;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 767px) {
+  /* Set background color for navbar collapse */
+  .navbar-collapse {
+    background-color: #fffff8;
+  }
+  /* Set width, margin-bottom, and text-align for form-inline */
+  .form-inline {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: right;
+  }
+  /* Set width and margin-right for form-control */
+  .form-control {
+    width: 80%;
+    margin-right: 10px;
+  }
+  /* Set width for btn */
+  .btn {
+    width: 15%;
+  }
+}
+
+/* Set styles for your form */
+.form {
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  position: relative;
+  top: 50px;
+}
+
+/* Set styles for your form labels */
+.form-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  position: absolute;
+  left: 20px;
+}
+
+/* Set styles for your form inputs */
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  position: relative;
+  top: 5px;
+}
+
+/* Set styles for your form buttons */
+.form-button {
+  background-color: #51b2fa;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+
+/* Set button hover styles */
+.form-button:hover {
+  background-color: #fff;
+  color: #51b2fa;
+}
+
+/* Set styles for your form inputs */
+.form-input {
+  font-family: sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Set styles for your form labels */
+.form-label {
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.form-group label {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.form-group input[type="radio"] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}

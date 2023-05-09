@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory Management System</title>
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/add_inventory.css') }}">
+
+  <!-- Add Bootstrap stylesheet link -->
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Logo and contact info -->
+    <div class="row">
+      <div class="col-lg-6">
+        <img class="logo" src="/static/logo.png" alt="Logo">
+      </div>
+      <div class="col-12 col-md-6 text-right">
+        <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
+        <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
+        <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
+        <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
+      </div>
+    </div>
+    <br>
+    <br>
+    <section id="form">
+      <h1 style="text-align: center;">Inventory Form</h1>
+      <form action="/submit" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="Project">Project</label>
+          <input type="text" class="form-control" id="Project" name="Project">
+        </div>
+        <div class="form-group">
+          <label for="Equipment">Equipment</label>
+          <input type="text" class="form-control" id="Equipment" name="Equipment">
+        </div>
+        <div class="form-group">
+          <label for="TechnicalID">Technical ID</label>
+          <input type="text" class="form-control" id="TechnicalID" name="TechnicalID">
+        </div>
+        <div class="form-group">
+          <label for="AssetsID">Assets ID</label>
+          <input type="text" class="form-control" id="AssetsID" name="AssetsID">
+        </div>
+        <div class="form-group">
+          <label for="Internal labeling">Internal labeling</label>
+          <input type="text" class="form-control" id="Internal labeling" name="Internal labeling">
+        </div>
+        <div class="form-group">
+          <label for="Category">Category</label>
+          <input type="text" class="form-control" id="Category" name="Category">
+        </div>
+        <div class="form-group">
+          <label for="Model">Model</label>
+          <input type="text" class="form-control" id="Model" name="Model">
+        </div>
+        <div class="form-group">
+          <label for="Included in HQ">Included in HQ</label>
+          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="yes"> Yes
+          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="no"> No
+          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="auction"> Auction
+        </div>
+        <div class="form-group">
+          <label for="Acquisition date">Acquisition date</label>
+          <input type="date" class="form-control" id="Acquisition date" name="Acquisition date">
+        </div>
+  
+</body>
+</html>

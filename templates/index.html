@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Inventory Management System</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/index_styles.css">
+	<!-- Add Bootstrap stylesheet link -->
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+        <!-- Logo and contact info -->
+        <div class="row">
+            <div class="col-lg-6">
+                <img class="logo" src="/static/logo.png" alt="Logo">
+            </div>
+            <div class="col-12 col-md-6 text-right">
+                <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
+                <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
+                <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
+                <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
+            </div>
+        </div>
+
+        <!-- Navigation bar with search box -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+        <!-- Options buttons for inventory and employee management -->
+        <div class="options">
+            <div class="option">
+                <a href="{{ url_for('add_inventory') }}"><button class="button">Add Inventory</button></a>
+            </div>
+        </div>
+        
+            <div class="option">
+                <a href="/view_inventory.html"><button class="button">View Inventory</button></a>
+            </div>
+            <div class="option">
+                <a href="/add_employee.html"><button class="button">Add Employee</button></a>
+            </div>
+            <div class="option">
+                <a href="/view_employee.html"><button class="button">View Employee</button></a>
+            </div>
+        </div>
+        
+
+	<!-- Add Bootstrap JavaScript script tags for toggle button functionality -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

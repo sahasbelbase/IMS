@@ -1,0 +1,72 @@
+body {
+  background-color: #51b2fa;
+  color: #fff;
+}
+
+/* Set container width and margins */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Set maximum width and margin for logo image */
+.logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Style for button elements */
+.button {
+  background-color: #fff;
+  color: #51b2fa;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Set button hover styles */
+.button:hover {
+  background-color: #51b2fa;
+  color: #fff;
+}
+
+/* Set display properties for options container */
+.options {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Set margin-bottom for each option */
+.option {
+  margin-bottom: 20px;
+  align-items: normal;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 767px) {
+  /* Set background color for navbar collapse */
+  .navbar-collapse {
+    background-color: #fffff8;
+  }
+  /* Set width, margin-bottom, and text-align for form-inline */
+  .form-inline {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: right;
+  }
+  /* Set width and margin-right for form-control */
+  .form-control {
+    width: 80%;
+    margin-right: 10px;
+  }
+  /* Set width for btn */
+  .btn {
+    width: 15%;
+  }
+}
