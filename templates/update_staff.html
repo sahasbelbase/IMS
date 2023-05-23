@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+  <div class="container">
+    
+    <h1 style="text-align: center;">UPDATE STAFF</h1>
+    <form method="POST" action="{{ url_for('update_staff', staff_id=staff.staff_id) }}">
+      <form>
+        <div class="form-group">
+          <label for="proj_id">Project Name:</label>
+          <select class="form-control" id="proj_id" name="proj_id" required>
+            {% for project in projects %}
+            <option value="{{ project.proj_id }}" {% if project.proj_id == staff.proj_id %}selected{% endif %}>{{ project.proj_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="first_name">First Name:</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" value="{{ staff.first_name }}" required>
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name:</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" value="{{ staff.last_name }}" required>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender:</label>
+          <select class="form-control" id="gender" name="gender" required>
+            <option value="male" {% if staff.gender == 'male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if staff.gender == 'female' %}selected{% endif %}>Female</option>
+            <option value="other" {% if staff.gender == 'other' %}selected{% endif %}>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dob">Date of Birth: </label>
+          <input type="date" class="form-control" id="dob" name="dob" value="{{ staff.dob }}" required>
+        </div>
+        <div class="form-group">
+          <label for="work_email">Work Email: </label>
+          <input type="email" class="form-control" id="work_email" name="work_email" value="{{ staff.work_email }}">
+        </div>
+        <div class="form-group">
+          <label for="personal_email">Personal Email: </label>
+          <input type="email" class="form-control" id="personal_email" name="personal_email" value="{{ staff.personal_email }}" required>
+        </div>
+        <div class="form-group">
+          <label for="contact_number">Contact Number: </label>
+          <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ staff.contact_number }}" required>
+        </div>
+        <div class="form-group">
+          <label for="emergency_contact_number">Emergency Contact Number: </label>
+          <input type="text" class="form-control" id="emergency_contact_number" name="emergency_contact_number" value="{{ staff.emergency_contact_number }}" required>
+        </div>
+        <div class="form-group">
+          <label for="address">Address: </label>
+          <textarea class="form-control" id="address" name="address">{{ staff.address }}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="disability_type">Disability Type: </label>
+          <input type="text" class="form-control" id="disability_type" name="disability_type" value="{{ staff.disability_type }}" required>
+        </div>
+        <div class="form-group">
+          <label for="department">Department: </label>
+          <input type="text" class="form-control" id="department" name="department" value="{{ staff.department }}" required>
+        </div>
+        <div class="form-group">
+          <label for="call_sign">Call Sign: </label>
+          <input type="text" class="form-control" id="call_sign" name="call_sign" value="{{ staff.call_sign }}">
+        </div>
+        <div class="form-group">
+          <label for="un_index_number">UN Index Number: </label>
+          <input type="text" class="form-control" id="un_index_number" name="un_index_number" value="{{ staff.un_index_number }}">
+        </div>
+        <div class="form-group">
+          <label for="joining_date">Joining Date: </label>
+          <input type="date" class="form-control" id="joining_date" name="joining_date" value="{{ staff.joining_date }}" required>
+        </div>
+        <div class="form-group">
+          <label for="last_working_date">Last Working Date: </label>
+          <input type="date" class="form-control" id="last_working_date" name="last_working_date" value="{{ staff.last_working_date }}">
+        </div>
+        <div class="form-group">
+          <label for="contract_type">Contract Type: </label>
+          <input type="text" class="form-control" id="contract_type" name="contract_type" value="{{ staff.contract_type }}" required>
+        </div>
+        <div class="form-group">
+          <label for="grade">Grade: </label>
+          <input type="text" class="form-control" id="grade" name="grade" value="{{ staff.grade }}" required>
+        </div>
+        <div class="form-group">
+          <label for="designation">Designation: </label>
+          <input type="text" class="form-control" id="designation" name="designation" value="{{ staff.designation }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+      <a class="btn btn-secondary" href="{{ url_for('view_staff_one', staff_id=staff.staff_id) }}">Cancel</a>
+    </form>
+  </div>
+
+{% endblock %}

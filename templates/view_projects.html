@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Project Table -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><strong>Project Name</strong></th>
+                        <th><strong>Project ID</strong></th>
+                        <th><strong>Doner</strong></th>
+                        <th><strong>Description</strong></th>
+                        <th><strong>Action</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                        <tr>
+                            <td>{{ project.proj_name }}</td>
+                            <td>{{ project.proj_id }}</td>
+                            <td>{{ project.doner }}</td>
+                            <td>{{ project.description }}</td>
+                            <td>
+                                <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
+                                <a href="{{ url_for('delete_project', proj_id=project.proj_id) }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
+    </div>
+{% endblock %}

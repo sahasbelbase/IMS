@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1 style="text-align: center;">Update Project</h1>
+  <form method="POST" action="{{ url_for('update_project', proj_id=project.proj_id) }}">
+    <div class="form-group">
+      <label for="proj_name">Project Name:</label>
+      <input type="text" class="form-control" id="proj_name" name="proj_name" value="{{ project.proj_name }}" required>
+    </div>
+    <div class="form-group">
+      <label for="doner">Doner:</label>
+      <input type="text" class="form-control" id="doner" name="doner" value="{{ project.doner }}" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <input type="text" class="form-control" id="description" name="description" value="{{ project.description }}" required>
+    </div>
+    <div class="form-group">
+      <label for="is_active">Is Active:</label>
+      <select class="form-control" id="is_active" name="is_active" required>
+        <option value="yes" {% if project.is_active == 'yes' %}selected{% endif %}>Yes</option>
+        <option value="no" {% if project.is_active == 'no' %}selected{% endif %}>No</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{{ url_for('view_projects') }}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

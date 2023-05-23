@@ -1,70 +1,115 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Inventory Management System</title>
-  
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/add_inventory.css') }}">
+{% extends 'base.html' %}
 
-  <!-- Add Bootstrap stylesheet link -->
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Logo and contact info -->
-    <div class="row">
-      <div class="col-lg-6">
-        <img class="logo" src="/static/logo.png" alt="Logo">
-      </div>
-      <div class="col-12 col-md-6 text-right">
-        <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
-        <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
-        <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
-        <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
-      </div>
+{% block content %}
+<div class="container">
+  <h1 style="text-align: center;">Add Inventory</h1>
+  <form method="POST" action="{{ url_for('add_inventory') }}">
+    <div class="form-group">
+      <label for="proj_id">Project:</label>
+      <select class="form-control" id="proj_id" name="proj_id" required>
+        {% for project in projects %}
+        <option value="{{ project.proj_id }}">{{ project.proj_name }}</option>
+        {% endfor %}
+      </select>
     </div>
-    <br>
-    <br>
-    <section id="form">
-      <h1 style="text-align: center;">Inventory Form</h1>
-      <form action="/submit" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-          <label for="Project">Project</label>
-          <input type="text" class="form-control" id="Project" name="Project">
-        </div>
-        <div class="form-group">
-          <label for="Equipment">Equipment</label>
-          <input type="text" class="form-control" id="Equipment" name="Equipment">
-        </div>
-        <div class="form-group">
-          <label for="TechnicalID">Technical ID</label>
-          <input type="text" class="form-control" id="TechnicalID" name="TechnicalID">
-        </div>
-        <div class="form-group">
-          <label for="AssetsID">Assets ID</label>
-          <input type="text" class="form-control" id="AssetsID" name="AssetsID">
-        </div>
-        <div class="form-group">
-          <label for="Internal labeling">Internal labeling</label>
-          <input type="text" class="form-control" id="Internal labeling" name="Internal labeling">
-        </div>
-        <div class="form-group">
-          <label for="Category">Category</label>
-          <input type="text" class="form-control" id="Category" name="Category">
-        </div>
-        <div class="form-group">
-          <label for="Model">Model</label>
-          <input type="text" class="form-control" id="Model" name="Model">
-        </div>
-        <div class="form-group">
-          <label for="Included in HQ">Included in HQ</label>
-          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="yes"> Yes
-          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="no"> No
-          <input type="radio" class="form-control" id="Included in HQ" name="Included in HQ" value="auction"> Auction
-        </div>
-        <div class="form-group">
-          <label for="Acquisition date">Acquisition date</label>
-          <input type="date" class="form-control" id="Acquisition date" name="Acquisition date">
-        </div>
-  
-</body>
-</html>
+
+    <div class="form-group">
+      <label for="equipment">Equipment:</label>
+      <input type="text" class="form-control" id="equipment" name="equipment" required>
+    </div>
+    <div class="form-group">
+      <label for="technical_id">Technical ID:</label>
+      <input type="text" class="form-control" id="technical_id" name="technical_id" required>
+    </div>
+    <div class="form-group">
+      <label for="asset_id">Asset ID:</label>
+      <input type="text" class="form-control" id="asset_id" name="asset_id" required>
+    </div>
+    <div class="form-group">
+      <label for="inventory_labeling">Inventory Labeling:</label>
+      <input type="text" class="form-control" id="inventory_labeling" name="inventory_labeling" required>
+    </div>
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <input type="text" class="form-control" id="category" name="category" required>
+    </div>
+    <div class="form-group">
+      <label for="item">Item:</label>
+      <input type="text" class="form-control" id="item" name="item" required>
+    </div>
+    <div class="form-group">
+      <label for="make">Make:</label>
+      <input type="text" class="form-control" id="make" name="make">
+    </div>
+    <div class="form-group">
+      <label for="model">Model:</label>
+      <input type="text" class="form-control" id="model" name="model" required>
+    </div>
+    <div class="form-group">
+      <label for="serial_no">Serial Number:</label>
+      <input type="text" class="form-control" id="serial_no" name="serial_no" required>
+    </div>
+    <div class="form-group">
+      <label for="document_type">Document Type:</label>
+      <input type="text" class="form-control" id="document_type" name="document_type">
+    </div>
+    <div class="form-group">
+      <label for="document_id">Document ID:</label>
+      <input type="text" class="form-control" id="document_id" name="document_id">
+    </div>
+    <div class="form-group">
+      <label for="acquisition_date">Acquisition Date:</label>
+      <input type="date" class="form-control" id="acquisition_date" name="acquisition_date" required>
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount:</label>
+      <input type="number" class="form-control" id="amount" name="amount" required>
+    </div>
+    <div class="form-group">
+      <label for="exchange_rate">Exchange Rate:</label>
+      <input type="number" class="form-control" id="exchange_rate" name="exchange_rate" required>
+    </div>
+    <div class="form-group">
+      <label for="Amount_in_USD">Amount in USD:</label>
+      <input type="number" class="form-control" id="amount_in_usd" name="amount_in_usd" required>
+    </div>
+    <div class="form-group">
+      <label for="warranty">Warranty:</label>
+      <input type="text" class="form-control" id="warranty" name="warranty">
+    </div>
+    <div class="form-group">
+      <label for="Location">Location:</label>
+      <input type="text" class="form-control" id="location" name="location">
+    </div>
+    <div class="form-group">
+      <label for="remark">Remark:</label>
+      <input type="text" class="form-control" id="remark" name="remark">
+    </div>
+    <div class="form-group">
+      <label for="staff">Custodian Name:</label>
+      <select class="form-control" id="staff" name="staff">
+        {% for staff_member in staff_members %}
+        <option value="{{ staff_member.staff_id }}">{{ staff_member.first_name }} {{ staff_member.last_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <input type="text" class="form-control" id="status" name="status">
+    </div>
+    <div class="form-group">
+      <label for="internal_remark">Internal Remark:</label>
+      <input type="text" class="form-control" id="internal_remark" name="internal_remark">
+    </div>
+    <div class="form-group">
+      <label for="included_in_hq">Included in HQ:</label>
+      <select class="form-control" id="included_in_hq" name="included_in_hq" required>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+        <option value="disposal">Disposal</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

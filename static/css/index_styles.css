@@ -1,6 +1,6 @@
 body {
   background-color: #51b2fa;
-  color: #fff;
+  color: rgb(243, 242, 242);
 }
 
 /* Set container width and margins */
@@ -19,7 +19,7 @@ body {
 
 /* Style for button elements */
 .button {
-  background-color: #fff;
+  background-color:rgb(243, 242, 242);
   color: #51b2fa;
   border: none;
   padding: 10px 20px;
@@ -32,7 +32,7 @@ body {
 /* Set button hover styles */
 .button:hover {
   background-color: #51b2fa;
-  color: #fff;
+  color:rgb(243, 242, 242);
 }
 
 /* Set display properties for options container */
@@ -52,7 +52,7 @@ body {
 @media screen and (max-width: 767px) {
   /* Set background color for navbar collapse */
   .navbar-collapse {
-    background-color: #fffff8;
+    background-color:rgb(243, 242, 242)8;
   }
   /* Set width, margin-bottom, and text-align for form-inline */
   .form-inline {
@@ -69,4 +69,26 @@ body {
   .btn {
     width: 15%;
   }
+}
+table {
+  max-width: 100%;
+  margin: 0 auto;
+}
+table {
+  overflow-x: auto;
+}
+table {
+  display: table;
+}
+
+table td,
+table th {
+  display: table-cell;
+}
+.inventory-table {
+  margin: 0 auto;
+  width: 50%;
+}
+.inventory-table ul {
+  line-height: 2.5;
 }

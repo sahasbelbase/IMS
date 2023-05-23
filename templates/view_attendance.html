@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Attendance Table -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Attendance ID</th>
+                        <th>Staff Name</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attendance in attendances %}
+                    <tr>
+                        <td>{{ attendance.att_id }}</td>
+                        <td>{{ attendance.staff.first_name }} {{ attendance.staff.last_name }}</td>
+                        <td>{{ attendance.leave_type }}</td>
+                        <td>{{ attendance.start_date }}</td>
+                        <td>{{ attendance.end_date }}</td>
+                        <td>{{ attendance.remarks }}</td>
+                        <td>
+                            <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                            <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Inventory Table -->
+<div class="container inventory-table text-center" style="display: flex; justify-content: center; text-align: center;">
+    <h1 class="d-flex justify-content-between">Inventory</h1>
+
+    <div class="container mt-5">
+        <hr>
+        <div class="row mt-5">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h4 class="card-title">Inventory ID: {{ inventory_item.inventory_id }}</h4>
+                        <ul class="list-unstyled">
+                            <p><strong  style="text-align: center;">Project: </strong> {{ project.proj_name }}</p>
+                            <p><strong style="text-align: center;">Equipment :</strong> {{ inventory_item.equipment }}</p>
+                            <p><strong style="text-align: center;">Technical ID: </strong> {{ inventory_item.technical_id }}</p>
+                            <p><strong style="text-align: center;">Asset ID: </strong> {{ inventory_item.asset_id }}</p>
+                            <p><strong style="text-align: center;">Inventory Labeling: </strong> {{ inventory_item.inventory_labeling }}</p>
+                            <p><strong style="text-align: center;">Category: </strong> {{ inventory_item.category }}</p>
+                            <p><strong style="text-align: center;">Item: </strong> {{ inventory_item.item }}</p>
+                            <p><strong style="text-align: center;">Make: </strong> {{ inventory_item.make }}</p>
+                            <p><strong style="text-align: center;">Model: </strong> {{ inventory_item.model }}</p>
+                            <p><strong  style="text-align: center;">Serial Number: </strong> {{ inventory_item.serial_no }}</p>
+                            <p><strong  style="text-align: center;">Document Type: </strong> {{ inventory_item.document_type }}</p>
+                            <p><strong  style="text-align: center;">Document ID: </strong> {{ inventory_item.document_id }}</p>
+                            <p><strong style="text-align: center;">Acquisition Date: </strong> {{ inventory_item.acquisition_date }}</p>
+                            <p><strong style="text-align: center;">Amount: </strong> {{ inventory_item.amount }}</p>
+                            <p><strong style="text-align: center;">Exchange Rate: </strong> {{ inventory_item.exchange_rate }}</p>
+                            <p><strong style="text-align: center;">Amount in USD: </strong> {{ inventory_item.amount_in_usd }}</p>
+                            <p><strong style="text-align: center;">Warranty: </strong> {{ inventory_item.warranty }}</p>
+                            <p><strong style="text-align: center;">Location: </strong> {{ inventory_item.location }}</p>
+                            <p><strong style="text-align: center;">Remark: </strong> {{ inventory_item.remark }}</p>
+                            <p><strong style="text-align: center;">Custodian Name: </strong> {{ inventory_item.staff.first_name }} {{ inventory_item.staff.last_name }}</p>
+                            <p><strong style="text-align: center;">Status:</strong> {{ inventory_item.status }}</p>
+                            <p><strong style="text-align: center;">Internal Remark: </strong> {{ inventory_item.internal_remark }}</p>
+                            <p><strong style="text-align: center;" >Included in HQ: </strong> {{ inventory_item.included_in_hq }}</p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ url_for('view_inventory') }}" class="btn btn-primary" style="justify-content: left;">Back</a>&nbsp;&nbsp;
+        <a href="{{ url_for('delete_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-danger" style="justify-content: left;">Delete</a>&nbsp;&nbsp;
+        <a href="{{ url_for('update_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>
+        
+        
+    </div>
+</div>
+
+{% endblock %}

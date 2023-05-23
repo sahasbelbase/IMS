@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center;">ADD ATTENDANCE</h1>
+    <form method="POST" action="{{ url_for('add_attendance') }}">
+        <div class="form-group">
+            <label for="staff_id">Staff Name:</label>
+            <select class="form-control" id="staff_id" name="staff_id" required>
+                {% for staff in staffs %}
+                <option value="{{ staff.staff_id }}">{{ staff.first_name }} {{ staff.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="leave_type">Leave Type:</label>
+            <select class="form-control" id="leave_type" name="leave_type" required>
+                <option value="full day">Full Day</option>
+                <option value="first half">First Half</option>
+                <option value="second half">Second Half</option>
+                <option value="sick leave">Sick Leave</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="start_date">Start Date:</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" required>
+        </div>
+        <div class="form-group">
+            <label for="end_date">End Date:</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" required>
+        </div>
+        <div class="form-group">
+            <label for="remarks">Remarks:</label>
+            <input type="text" class="form-control" id="remarks" name="remarks" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

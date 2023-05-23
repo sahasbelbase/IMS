@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1 style="text-align: center;">Update Inventory</h1>
+  <form method="POST" action="{{ url_for('update_inventory', inventory_id=inventory.inventory_id) }}">
+    <input type="hidden" name="inventory_id" value="{{ inventory.inventory_id }}">
+
+    <div class="form-group">
+      <label for="proj_id">Project:</label>
+      <select class="form-control" id="proj_id" name="proj_id" required>
+        {% for project in projects %}
+        <option value="{{ project.proj_id }}" {% if project.proj_id == inventory.proj_id %}selected{% endif %}>{{ project.proj_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="equipment">Equipment:</label>
+      <input type="text" class="form-control" id="equipment" name="equipment" value="{{ inventory.equipment }}" required>
+    </div>
+    <div class="form-group">
+      <label for="technical_id">Technical ID:</label>
+      <input type="text" class="form-control" id="technical_id" name="technical_id" value="{{ inventory.technical_id }}" required>
+    </div>
+    <div class="form-group">
+      <label for="asset_id">Asset ID:</label>
+      <input type="text" class="form-control" id="asset_id" name="asset_id" value="{{ inventory.asset_id }}" required>
+    </div>
+    <div class="form-group">
+      <label for="inventory_labeling">Inventory Labeling:</label>
+      <input type="text" class="form-control" id="inventory_labeling" name="inventory_labeling" value="{{ inventory.inventory_labeling }}" required>
+    </div>
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <input type="text" class="form-control" id="category" name="category" value="{{ inventory.category }}" required>
+    </div>
+    <div class="form-group">
+      <label for="item">Item:</label>
+      <input type="text" class="form-control" id="item" name="item" value="{{ inventory.item }}" required>
+    </div>
+    <div class="form-group">
+      <label for="make">Make:</label>
+      <input type="text" class="form-control" id="make" name="make" value="{{ inventory.make }}">
+    </div>
+    <div class="form-group">
+      <label for="model">Model:</label>
+      <input type="text" class="form-control" id="model" name="model" value="{{ inventory.model }}" required>
+    </div>
+    <div class="form-group">
+      <label for="serial_no">Serial Number:</label>
+      <input type="text" class="form-control" id="serial_no" name="serial_no" value="{{ inventory.serial_no }}" required>
+    </div>
+    <div class="form-group">
+      <label for="document_type">Document Type:</label>
+      <input type="text" class="form-control" id="document_type" name="document_type" value="{{ inventory.document_type }}">
+    </div>
+    <div class="form-group">
+      <label for="document_id">Document ID:</label>
+      <input type="text" class="form-control" id="document_id" name="document_id" value="{{ inventory.document_id }}">
+    </div>
+    <div class="form-group">
+      <label for="acquisition_date">Acquisition Date:</label>
+      <input type="date" class="form-control" id="acquisition_date" name="acquisition_date" value="{{ inventory.acquisition_date.strftime('%Y-%m-%d') }}" required>
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount:</label>
+      <input type="number" class="form-control" id="amount" name="amount" value="{{ inventory.amount }}" required>
+    </div>
+    <div class="form-group">
+      <label for="exchange_rate">Exchange Rate:</label>
+      <input type="number" class="form-control" id="exchange_rate" name="exchange_rate" value="{{ inventory.exchange_rate }}" required>
+    </div>
+    <div class="form-group">
+      <label for="amount_in_usd">Amount in USD:</label>
+      <input type="number" class="form-control" id="amount_in_usd" name="amount_in_usd" value="{{ inventory.amount_in_usd }}" required>
+    </div>
+    <div class="form-group">
+      <label for="warranty">Warranty:</label>
+      <input type="text" class="form-control" id="warranty" name="warranty" value="{{ inventory.warranty }}">
+    </div>
+    <div class="form-group">
+      <label for="location">Location:</label>
+      <input type="text" class="form-control" id="location" name="location" value="{{ inventory.location }}">
+    </div>
+    <div class="form-group">
+      <label for="remark">Remark:</label>
+      <input type="text" class="form-control" id="remark" name="remark" value="{{ inventory.remark }}">
+    </div>
+    <div class="form-group">
+      <label for="staff">Custodian Name:</label>
+      <select class="form-control" id="staff" name="staff">
+        {% for staff_member in staff_members %}
+        <option value="{{ staff_member.staff_id }}" {% if staff_member.staff_id == inventory.staff_id %}selected{% endif %}>{{ staff_member.first_name }} {{ staff_member.last_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <input type="text" class="form-control" id="status" name="status" value="{{ inventory.status }}">
+    </div>
+    <div class="form-group">
+      <label for="internal_remark">Internal Remark:</label>
+      <input type="text" class="form-control" id="internal_remark" name="internal_remark" value="{{ inventory.internal_remark }}">
+    </div>
+    <div class="form-group">
+      <label for="included_in_hq">Included in HQ:</label>
+      <select class="form-control" id="included_in_hq" name="included_in_hq" required>
+        <option value="yes" {% if inventory.included_in_hq == 'yes' %}selected{% endif %}>Yes</option>
+        <option value="no" {% if inventory.included_in_hq == 'no' %}selected{% endif %}>No</option>
+        <option value="disposal" {% if inventory.included_in_hq == 'disposal' %}selected{% endif %}>Disposal</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+{% endblock %}

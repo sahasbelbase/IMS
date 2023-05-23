@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center;">Update Attendance</h1>
+    <form method="POST" action="{{ url_for('update_attendance', att_id=attendance.att_id) }}">
+        <div class="form-group">
+            <label for="staff_id">Staff Name:</label>
+            <select class="form-control" id="staff_id" name="staff_id" required>
+                {% for staff in staffs %}
+                <option value="{{ staff.staff_id }}" {% if staff.staff_id == attendance.staff_id %}selected{% endif %}>{{ staff.first_name }} {{ staff.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="leave_type">Leave Type:</label>
+            <select class="form-control" id="leave_type" name="leave_type" required>
+                <option value="Full Day" {% if attendance.leave_type == 'Full Day' %}selected{% endif %}>Full Day</option>
+                <option value="First Half" {% if attendance.leave_type == 'First Half' %}selected{% endif %}>First Half</option>
+                <option value="Second Half" {% if attendance.leave_type == 'Second Half' %}selected{% endif %}>Second Half</option>
+                <option value="Sick Leave" {% if attendance.leave_type == 'Sick Leave' %}selected{% endif %}>Sick Leave</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="start_date">Start Date:</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ attendance.start_date }}" required>
+        </div>
+        <div class="form-group">
+            <label for="end_date">End Date:</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ attendance.end_date }}" required>
+        </div>
+        <div class="form-group">
+            <label for="remarks">Remarks:</label>
+            <input type="text" class="form-control" id="remarks" name="remarks" value="{{ attendance.remarks }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url_for('view_attendance') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

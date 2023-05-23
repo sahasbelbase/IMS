@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+       <!-- staff Table -->
+    <div class="row mt-5 align-items-start">
+        <div class="col-12">
+            <ul class="list-unstyled">
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img class="img-fluid rounded-circle" src="/static/profile_pictures/{{ staff.profile_picture }}" alt="Profile Picture">
+                        </div>
+                        <div class="col-md-8">
+                            <h5>Name: {{ staff.first_name }} {{ staff.last_name }}</h5>
+                            <p>Allocated Project : {{ project_name }}</p>
+                            <p>Gender: {{ staff.gender }}</p>
+                            <p>Date Of Birth: {{ staff.dob }}</p>
+                            <p>Work email: {{ staff.work_email }}</p>
+                            <p>Personal email: {{ staff.personal_email }}</p>
+                            <p>Contact:{{ staff.contact_number }}</p>
+                            <p>Emergency Contact Number: {{ staff.emergency_contact_number }}</p>
+                            <p>Address: {{ staff.address }}</p>
+                            <p>Disability Type: {{ staff.disability_type }}</p>
+                            <p>Department: {{ staff.department }}</p>
+                            <p>Call Sign: {{ staff.call_sign }}</p>
+                            <p>Index Number: {{ staff.un_index_number }}</p>
+                            <p>Joining Date: {{ staff.joining_date }}</p>
+                            <p>Last Working Date:{{ staff.last_working_date }}</p>
+                            <p>Contact Type:{{ staff.contract_type }}</p>
+                            <p>Grade: {{ staff.grade }}</p>
+                            <p>Designation: {{ staff.designation }}</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <a href="{{ url_for('view_staff') }}" class="btn btn-primary">Back</a>&nbsp;&nbsp;
+        <a href="{{ url_for('delete_staff', staff_id=staff.staff_id) }}" class="btn btn-danger" style="justify-content: left;">Delete</a>&nbsp;&nbsp;
+        <a href="{{ url_for('update_staff', staff_id=staff.staff_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>
+{% endblock %}

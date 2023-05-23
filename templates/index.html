@@ -1,61 +1,150 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Inventory Management System</title>
-	<link rel="stylesheet" type="text/css" href="/static/css/index_styles.css">
-	<!-- Add Bootstrap stylesheet link -->
-	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-	<div class="container">
-        <!-- Logo and contact info -->
-        <div class="row">
-            <div class="col-lg-6">
-                <img class="logo" src="/static/logo.png" alt="Logo">
-            </div>
-            <div class="col-12 col-md-6 text-right">
-                <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
-                <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
-                <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
-                <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
-            </div>
-        </div>
+{% extends 'base.html' %}
 
-        <!-- Navigation bar with search box -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
+{% block content %}
+    <!-- Options buttons for inventory and staff management -->
+    <div class="options">
+        <style>
+            .options {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 50px;
+            }
 
-        <!-- Options buttons for inventory and employee management -->
-        <div class="options">
+            .box {
+                background-color: #f0f0f0;
+                padding: 20px;
+                text-align: center;
+                width: 200px;
+                border-radius: 5px;
+            }
+
+            .box h2 {
+                margin-bottom: 15px;
+                font-size: 1.5rem;
+            }
+
+            .option {
+                margin-bottom: 10px;
+            }
+
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #51b2fa;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 15px;
+            }
+
+            .button:hover {
+                background-color:  #51b2fa;
+            }
+
+            /* Adjust the size of search elements */
+            .search-form {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .search-input {
+                width: 100%;
+                max-width: 150px; /* Adjust the max width as needed */
+                padding: 6px;
+                font-size: 14px;
+            }
+
+            .search-button {
+                margin-left: 5px;
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        </style>
+
+        <div class="box">
+            <h2>Inventory Management</h2>
             <div class="option">
                 <a href="{{ url_for('add_inventory') }}"><button class="button">Add Inventory</button></a>
             </div>
+            <div class="option">
+                <a href="{{ url_for('view_inventory') }}"><button class="button">View Inventory</button></a>
+            </div>
+            <div class="option">
+                <div class="search-form">
+                    <input class="search-input" type="search" placeholder="Search" aria-label="Search">
+                    <button class="search-button btn btn-outline-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
-        
-            <div class="option">
-                <a href="/view_inventory.html"><button class="button">View Inventory</button></a>
-            </div>
-            <div class="option">
-                <a href="/add_employee.html"><button class="button">Add Employee</button></a>
-            </div>
-            <div class="option">
-                <a href="/view_employee.html"><button class="button">View Employee</button></a>
-            </div>
-        </div>
-        
 
-	<!-- Add Bootstrap JavaScript script tags for toggle button functionality -->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+        <div class="box">
+            <h2>Staff Management</h2>
+            <div class="option">
+                <a href="{{ url_for('add_staff') }}"><button class="button">Add Staff</button></a>
+            </div>
+            <div class="option">
+                <a href="{{ url_for('view_staff') }}"><button class="button">View Staff</button></a>
+            </div>
+            <div class="option">
+                <div class="search-form">
+                    <input class="search-input" type="search" placeholder="Search" aria-label="Search">
+                    <button class="search-button btn btn-outline-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <h2>Project Management</h2>
+            <div class="option">
+                <a href="{{ url_for('add_projects') }}"><button class="button">Add Project</button></a>
+            </div>
+            <div class="option">
+                <a href="{{ url_for('view_projects') }}"><button class="button">View Project</button></a>
+            </div>
+            <div class="option">
+                <div class="search-form">
+                    <input class="search-input" type="search" placeholder="Search" aria-label="Search">
+                    <button class="search-button btn btn-outline-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <h2>Attendance Management</h2>
+            <div class="option">
+                <a href="{{ url_for('add_attendance') }}"><button class="button">Add Attendance</button></a>
+            </div>
+            <div class="option">
+                <a href="{{ url_for('view_attendance') }}"><button class="button">View Attendance</button></a>
+            </div>
+            <div class="option">
+                <div class="search-form">
+                    <input class="search-input" type="search" placeholder="Search" aria-label="Search">
+                    <button class="search-button btn btn-outline-primary" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

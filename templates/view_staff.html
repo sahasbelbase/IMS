@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+
+    <!-- staff Basic Information Table -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><strong>Staff ID</strong></th>
+              <th><strong>First Name</strong></th>
+              <th><strong>Last Name</strong></th>
+              <th><strong>Contact Number</strong></th>
+              <th><strong>Department</strong></th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for staff in staffs %}
+              <tr>
+                <td>{{ staff.staff_id }}</td>
+                <td>{{ staff.first_name }}</td>
+                <td>{{ staff.last_name }}</td>
+                <td>{{ staff.contact_number }}</td>
+                <td>{{ staff.department }}</td>
+                <td><a href="{{ url_for('view_staff_one', staff_id=staff.staff_id) }}">View</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
+  </div>
+  
+  {% endblock %}
