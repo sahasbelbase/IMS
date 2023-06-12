@@ -1,34 +1,89 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Inventory Table -->
-<div class="row mt-5">
-  <div class="col-12">
-      <table class="table table-striped">
-          <thead>
-              <tr>
-                  <th>Inventory</th>
-                  <th>Project</th>
-                  <th>Equipment</th>
-                  <th>Category</th>
-                  <th>Item</th>
-                  <th>Action</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for inventory_item in inventory_items %}
-                  <tr>
-                      <td>{{ inventory_item.inventory_id }}</td>
-                      <td>{{ inventory_item.proj_id }}</td>
-                      <td>{{ inventory_item.equipment }}</td>
-                      <td>{{ inventory_item.category }}</td>
-                      <td>{{ inventory_item.item }}</td>
-                      <td><a href="{{ url_for('view_inventory_one', inventory_id=inventory_item.inventory_id) }}">View</a></td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-  </div>
-  <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
-</div>
+    <!-- Inventory Table -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('view_inventory', order='asc') }}">
+                                Inventory
+                                {% if order == 'asc' %}
+                                    <i class="fas fa-chevron-up"></i>
+                                {% endif %}
+                            </a>
+                            <a href="{{ url_for('view_inventory', order='desc') }}">
+                                {% if order == 'desc' %}
+                                    <i class="fas fa-chevron-down"></i>
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>Project</th>
+                        <th>Equipment</th>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inventory_item in inventory_items %}
+                        <tr>
+                            <td>{{ inventory_item.inventory_id }}</td>
+                            <td>{{ inventory_item.project.proj_name }}</td>
+                            <td>{{ inventory_item.equipment }}</td>
+                            <td>{{ inventory_item.category }}</td>
+                            <td>{{ inventory_item.item }}</td>
+                            <td><a href="{{ url_for('view_inventory_one', inventory_id=inventory_item.inventory_id) }}">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Pagination -->
+            <nav aria-label="Inventory Pagination">
+                <ul class="pagination justify-content-center">
+                    {% if inventory_paginate.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('view_inventory', page=inventory_paginate.prev_num, search_query=search_query) }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    {% endif %}
+
+                    {% for page in inventory_paginate.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                        {% if page %}
+                            {% if page == inventory_paginate.page %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('view_inventory', page=page, search_query=search_query) }}">{{ page }}</a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if inventory_paginate.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('view_inventory', page=inventory_paginate.next_num, search_query=search_query) }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
 {% endblock %}

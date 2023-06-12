@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Custom CSS -->
+  <style>
+    .transparent-box {
+      position: relative;
+      background-color: transparent;
+      border: none;
+    }
+
+    .transparent-box::before {
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+
+    .box-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container,
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      justify-content: flex-end; /* Align logo to the right side of its container */
+    }
+
+    .logo-container img {
+      max-height: 60%;
+      max-width: 85%;
+      object-fit: contain;
+      margin-right: -80px; /* Increase the margin to move the logo more to the right */
+    }
+
+    .login-container {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      justify-content: flex-start; /* Align form to the left side of its container */
+    }
+
+    .login-container form {
+      width: 100%;
+      max-width: 900px;
+      padding: 350px; /* Decrease the padding to move the form more to the right */
+      margin-left: 0;
+      margin-right: 0;
+      left: auto;
+    }
+
+    .login-container form label,
+    .login-container form input {
+      font-size: 125%; /* Increase the font size by 20% */
+    }
+
+    .login-container form input {
+      width: 140%; /* Set the text box width to 100% */
+    }
+
+    .login-container .form-group {
+      margin-bottom: 20px;
+    }
+
+    .container-fluid {
+      margin-left: 50%;
+    }
+  </style>
+</head>
+<body>
+  <section class="vh-100">
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <div class="col-md-6 p-0">
+          <div class="transparent-box">
+            <div class="box-content">
+              <div class="logo-container">
+                <img src="/static/logo.png" alt="Logo">
+              </div>
+              <div class="login-container">
+                <form action="{{ url_for('login') }}" method="POST">
+                  <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role" name="role" class="form-control" required>
+                      <option value="" disabled selected>Select your role</option>
+                      <option value="ICT">ICT</option>
+                      <option value="Manager">Manager</option>
+                      <option value="Operator">Operator</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                  </div>
+
+                  <!-- Error message -->
+                  {% if error %}
+                  <p class="text-danger">{{ error }}</p>
+                  {% endif %}
+
+                  <!-- Submit button -->
+                  {% if role == 'Admin' and password == 'admin_password' or role == 'ICT' and password == 'ict_password' or role == 'Manager' and password == 'manager_password' or role == 'Operator' and password == 'operator_password' %}
+                  <a href="{{ url_for('index') }}" class="btn btn-primary">Login</a>
+                  {% else %}
+                  <button type="submit" class="btn btn-primary">Login</button>
+                  {% endif %}
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha512-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

@@ -6,12 +6,15 @@
     <form method="POST" action="{{ url_for('add_attendance') }}">
         <div class="form-group">
             <label for="staff_id">Staff Name:</label>
-            <select class="form-control" id="staff_id" name="staff_id" required>
-                {% for staff in staffs %}
-                <option value="{{ staff.staff_id }}">{{ staff.first_name }} {{ staff.last_name }}</option>
-                {% endfor %}
-            </select>
+            <form action="/add_attendance" method="POST">
+                <label for="staff_personal_id"></label>
+                <select class="form-control" id="staff_personal_id" name="staff_personal_id" required>
+                    {% for staff_personal_info in staff_personal_infos %}
+                    <option value="{{ staff_personal_info.staff_personal_id }}">{{ staff_personal_info.first_name }} {{ staff_personal_info.last_name }}</option>
+                    {% endfor %}
+                </select>                  
         </div>
+        
         <div class="form-group">
             <label for="leave_type">Leave Type:</label>
             <select class="form-control" id="leave_type" name="leave_type" required>

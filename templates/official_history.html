@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        h1 {
+            color: #51b2fa;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #8fbef5;
+            font-size: 1.2rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        .no-history {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+
+    <h1>Official History</h1>
+    
+    <h2>Staff Personal Info</h2>
+    <p>First Name: {{ staff_personal_info.first_name }}</p>
+    <p>Last Name: {{ staff_personal_info.last_name }}</p>
+    
+
+    <h2>Staff Official Info</h2>
+    <p>Department: {{ staff_official_info.department }}</p>
+    <p>Work Email: {{ staff_official_info.work_email }}</p>
+   
+
+    <h2>Official History</h2>
+    {% if staff_official_history %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Joining Date</th>
+                    <th>Last Working Date</th>
+                    <th>Department</th>
+                    <th>Work Email</th>
+                    <th>Call Sign</th>
+                    <th>UN Index Number</th>
+                    <th>Contract Type</th>
+                    <th>Grade</th>
+                    <th>Designation</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in staff_official_history %}
+                    <tr>
+                        <td>{{ history.joining_date }}</td>
+                        <td>{{ history.last_working_date }}</td>
+                        <td>{{ history.department }}</td>
+                        <td>{{ history.work_email }}</td>
+                        <td>{{ history.call_sign }}</td>
+                        <td>{{ history.un_index_number }}</td>
+                        <td>{{ history.contract_type }}</td>
+                        <td>{{ history.grade }}</td>
+                        <td>{{ history.designation }}</td>
+                        <td>{{ history.created_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-history">No previous official history available.</p>
+    {% endif %}
+{% endblock %}

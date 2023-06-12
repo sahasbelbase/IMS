@@ -89,7 +89,7 @@
       <label for="staff">Custodian Name:</label>
       <select class="form-control" id="staff" name="staff">
         {% for staff_member in staff_members %}
-        <option value="{{ staff_member.staff_id }}">{{ staff_member.first_name }} {{ staff_member.last_name }}</option>
+        <option value="{{ staff_member.staff_personal_id }}">{{ staff_member.first_name }} {{ staff_member.last_name }}</option>
         {% endfor %}
       </select>
     </div>
@@ -112,4 +112,22 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
+
+<!-- Pop-up element -->
+<div id="popup" style="display: none;">Pop-up message goes here</div>
+
+{% block scripts %}
+<script>
+  // Get the pop-up element by ID
+  const popup = document.getElementById('popup');
+
+  // Show the pop-up message
+  popup.style.display = 'block';
+
+  // Hide the pop-up message after 3 seconds
+  setTimeout(function() {
+    popup.style.display = 'none';
+  }, 3000);
+</script>
+{% endblock %}
 {% endblock %}

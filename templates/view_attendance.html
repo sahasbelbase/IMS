@@ -4,35 +4,89 @@
     <!-- Attendance Table -->
     <div class="row mt-5">
         <div class="col-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Attendance ID</th>
-                        <th>Staff Name</th>
-                        <th>Leave Type</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Remarks</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for attendance in attendances %}
-                    <tr>
-                        <td>{{ attendance.att_id }}</td>
-                        <td>{{ attendance.staff.first_name }} {{ attendance.staff.last_name }}</td>
-                        <td>{{ attendance.leave_type }}</td>
-                        <td>{{ attendance.start_date }}</td>
-                        <td>{{ attendance.end_date }}</td>
-                        <td>{{ attendance.remarks }}</td>
-                        <td>
-                            <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
-                            <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% if attendances %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Attendance ID</th>
+                            <th>Staff Name</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Remarks</th>
+                            {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
+                                <th>Action</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendances.items %}
+                        <tr>
+                            <td>{{ attendance.att_id }}</td>
+                            <td>{{ attendance.staff_personal.first_name }} {{ attendance.staff_personal.last_name }}</td>
+                            <td>{{ attendance.leave_type }}</td>
+                            <td>{{ attendance.start_date }}</td>
+                            <td>{{ attendance.end_date }}</td>
+                            <td>{{ attendance.remarks }}</td>
+                            {% if session['user_id'] == 'ict' %}
+                                <td>
+                                    <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                                    <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger">Delete</a>
+                                </td>
+                            {% elif session['user_id'] == 'operator' %}
+                                <td>
+                                    <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Pagination links -->
+                <nav aria-label="Attendance pagination">
+                    <ul class="pagination justify-content-end">
+                        {% if attendances.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('view_attendance', page=attendances.prev_num, search_query=search_query) }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        {% endif %}
+
+                        {% for num in attendances.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                            {% if num %}
+                                {% if num == attendances.page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('view_attendance', page=num, search_query=search_query) }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if attendances.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('view_attendance', page=attendances.next_num, search_query=search_query) }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p>No attendance records found.</p>
+            {% endif %}
         </div>
         <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
     </div>

@@ -33,7 +33,7 @@
                             <p><strong style="text-align: center;">Warranty: </strong> {{ inventory_item.warranty }}</p>
                             <p><strong style="text-align: center;">Location: </strong> {{ inventory_item.location }}</p>
                             <p><strong style="text-align: center;">Remark: </strong> {{ inventory_item.remark }}</p>
-                            <p><strong style="text-align: center;">Custodian Name: </strong> {{ inventory_item.staff.first_name }} {{ inventory_item.staff.last_name }}</p>
+                            <p><strong style="text-align: center;">Custodian Name: </strong> {{ inventory_item.staff_personal.first_name }} {{ inventory_item.staff_personal.last_name }}</p>
                             <p><strong style="text-align: center;">Status:</strong> {{ inventory_item.status }}</p>
                             <p><strong style="text-align: center;">Internal Remark: </strong> {{ inventory_item.internal_remark }}</p>
                             <p><strong style="text-align: center;" >Included in HQ: </strong> {{ inventory_item.included_in_hq }}</p>
@@ -43,8 +43,12 @@
             </div>
         </div>
         <a href="{{ url_for('view_inventory') }}" class="btn btn-primary" style="justify-content: left;">Back</a>&nbsp;&nbsp;
+        {% if session['user_id'] == 'ict' %}
         <a href="{{ url_for('delete_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-danger" style="justify-content: left;">Delete</a>&nbsp;&nbsp;
-        <a href="{{ url_for('update_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>
+        {% endif %}
+        {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
+            <a href="{{ url_for('update_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>
+        {% endif %}
         
         
     </div>

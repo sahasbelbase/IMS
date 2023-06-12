@@ -11,7 +11,9 @@
                         <th><strong>Project ID</strong></th>
                         <th><strong>Doner</strong></th>
                         <th><strong>Description</strong></th>
-                        <th><strong>Action</strong></th>
+                        {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
+                            <th><strong>Action</strong></th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -22,8 +24,13 @@
                             <td>{{ project.doner }}</td>
                             <td>{{ project.description }}</td>
                             <td>
-                                <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
-                                <a href="{{ url_for('delete_project', proj_id=project.proj_id) }}" class="btn btn-danger">Delete</a>
+                                <!-- In your HTML template -->
+                                {% if session['user_id'] == 'ict' %}
+                                    <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
+                                    <a href="{{ url_for('delete_project', proj_id=project.proj_id) }}" class="btn btn-danger">Delete</a>
+                                {% elif session['user_id'] == 'operator' %}
+                                    <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -32,4 +39,47 @@
         </div>
         <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
     </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            {% if projects.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('view_projects', page=projects.prev_num, search_query=search_query) }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            {% endif %}
+
+            {% for num in projects.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if num %}
+                    {% if projects.page == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('view_projects', page=num, search_query=search_query) }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if projects.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('view_projects', page=projects.next_num, search_query=search_query) }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}
