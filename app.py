@@ -597,6 +597,13 @@ def update_staff(staff_personal_id):
 
     staff_personal_info = staff_official_info.staff_personal
 
+        
+    name = StaffPersonalInfo.first_name
+    last = StaffPersonalInfo.last_name
+    cont = StaffPersonalInfo.contact_number
+
+    profile_picture = f"{name}_{last}_{cont}"
+
     if request.method == 'POST':
         # Update staff personal info
         staff_personal_info.first_name = request.form['first_name'].capitalize()
