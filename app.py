@@ -88,7 +88,7 @@ class StaffPersonalInfo(db.Model):
 
 class StaffOfficialInfo(db.Model):
     staff_official_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    staff_personal_id = db.Column(db.Integer, db.ForeignKey('staff_personal_info.staff_personal_id', ondelete='CASCADE'), unique=True)
+    staff_personal_id = db.Column(db.String(255), db.ForeignKey('staff_personal_info.staff_personal_id', ondelete='CASCADE'), unique=True)
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
     project = db.relationship('Project', backref='staff_officials')
     department = db.Column(db.String(256), nullable=False)

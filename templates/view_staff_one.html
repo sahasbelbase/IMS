@@ -20,11 +20,13 @@
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col-md-12 text-center">
+                                {{staffpersonal.profile_picture == True}}
                                 {% if staffpersonal.profile_picture %}
                                 <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/' ~ staffpersonal.first_name[0]|upper ~ staffpersonal.first_name[1:] ~ '_' ~ staffpersonal.last_name[0]|upper ~ staffpersonal.last_name[1:] ~ '_' ~ staffpersonal.contact_number ~ get_file_extension(staffpersonal.profile_picture)) }}" alt="Profile Picture" id="profile-picture">
                                 {% else %}
-                                    <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/default_photo.png') }}" alt="Default Profile Picture" id="profile-picture">
+                                <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/default_photo.png') }}" alt="Default Profile Picture" id="profile-picture">
                                 {% endif %}
+                            
                             </div>
                         </div>
                     </div>
