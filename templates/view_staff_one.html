@@ -20,13 +20,12 @@
                     <div class="container mt-5">
                         <div class="row">
                             <div class="col-md-12 text-center">
-                                {{staffpersonal.profile_picture == True}}
-                                {% if staffpersonal.profile_picture %}
-                                <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/' ~ staffpersonal.first_name[0]|upper ~ staffpersonal.first_name[1:] ~ '_' ~ staffpersonal.last_name[0]|upper ~ staffpersonal.last_name[1:] ~ '_' ~ staffpersonal.contact_number ~ get_file_extension(staffpersonal.profile_picture)) }}" alt="Profile Picture" id="profile-picture">
+                                {% if staffpersonal and staffpersonal.photo_filename %}
+                                <img class="img-fluid profile-image" src="{{ url_for('static', filename='staff_images/' ~ staffpersonal.photo_filename) }}" alt="Profile Picture" id="profile-picture">
                                 {% else %}
                                 <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/default_photo.png') }}" alt="Default Profile Picture" id="profile-picture">
                                 {% endif %}
-                            
+                                
                             </div>
                         </div>
                     </div>
@@ -59,12 +58,12 @@
             <div class="col-md-6">
                 <div class="info-box">
                     <h2>Personal Info</h2>
-                    <p>Gender: {{ staffpersonal.gender }}</p>
+                    <p>Gender: {{ staffpersonal.gender|capitalize }}</p>
                     <p>Date Of Birth: {{ staffpersonal.dob }}</p>
                     <p>Personal email: {{ staffpersonal.personal_email }}</p>
                     <p>Contact: {{ staffpersonal.contact_number }}</p>
-                    <p>Address: {{ staffpersonal.address }}</p>
-                    <p>Disability Type: {{ staffpersonal.disability_type }}</p>
+                    <p>Address: {{ staffpersonal.address|capitalize }}</p>
+                    <p>Disability Type: {{ staffpersonal.disability_type|capitalize }}</p>
                 </div>
             </div>
             <div class="col-md-6">
@@ -73,14 +72,14 @@
                     <p>Allocated Project: {{ project_name }}</p>
                     <p>Work email: {{ staffofficial.work_email }}</p>
                     <p>Emergency Contact Number: {{ staffpersonal.emergency_contact_number }}</p>
-                    <p>Department: {{ staffofficial.department }}</p>
-                    <p>Call Sign: {{ staffofficial.call_sign }}</p>
-                    <p>Index Number: {{ staffofficial.un_index_number }}</p>
+                    <p>Department: {{ staffofficial.department|capitalize }}</p>
+                    <p>Call Sign: {{ staffofficial.call_sign|capitalize }}</p>
+                    <p>Index Number: {{ staffofficial.un_index_number|capitalize }}</p>
                     <p>Joining Date: {{ staffofficial.joining_date }}</p>
                     <p>Last Working Date: {{ staffofficial.last_working_date }}</p>
-                    <p>Contract Type: {{ staffofficial.contract_type }}</p>
-                    <p>Grade: {{ staffofficial.grade }}</p>
-                    <p>Designation: {{ staffofficial.designation }}</p>
+                    <p>Contract Type: {{ staffofficial.contract_type|capitalize }}</p>
+                    <p>Grade: {{ staffofficial.grade|capitalize }}</p>
+                    <p>Designation: {{ staffofficial.designation|capitalize }}</p>
                 </div>
                 <a href="{{ url_for('official_history', staff_personal_id=staffpersonal.staff_personal_id) }}" class="btn btn-info" style="margin-top: 10px;">Official History</a>
             </div>

@@ -1,24 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Staff  Table -->
+    <!-- Staff Table -->
     <div class="row mt-5">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Staff ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Contact Number</th>
-                        <th>Department</th>
+                        <th>
+                            <a href="{{ url_for('view_staff', sort='first_name', order=(sort == 'first_name' and order == 'asc') and 'desc' or 'asc') }}">
+                                First Name
+                                {% if sort == 'first_name' %}
+                                    {% if order == 'asc' %}
+                                        <i class="fas fa-chevron-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('view_staff', sort='last_name', order=(sort == 'last_name' and order == 'asc') and 'desc' or 'asc') }}">
+                                Last Name
+                                {% if sort == 'last_name' %}
+                                    {% if order == 'asc' %}
+                                        <i class="fas fa-chevron-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('view_staff', sort='contact_number', order=(sort == 'contact_number' and order == 'asc') and 'desc' or 'asc') }}">
+                                Contact Number
+                                {% if sort == 'contact_number' %}
+                                    {% if order == 'asc' %}
+                                        <i class="fas fa-chevron-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('view_staff', sort='department', order=(sort == 'department' and order == 'asc') and 'desc' or 'asc') }}">
+                                Department
+                                {% if sort == 'department' %}
+                                    {% if order == 'asc' %}
+                                        <i class="fas fa-chevron-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for staff in staffs.items %}
                         <tr>
-                            <td>{{ staff.staff_personal.staff_personal_id }}</td>
                             <td>{{ staff.staff_personal.first_name }}</td>
                             <td>{{ staff.staff_personal.last_name }}</td>
                             <td>{{ staff.staff_personal.contact_number }}</td>
@@ -29,6 +71,7 @@
                 </tbody>
             </table>
             
+            <!-- Pagination -->
             <nav aria-label="Staff pagination">
                 <ul class="pagination justify-content-end">
                     {% if staffs.has_prev %}

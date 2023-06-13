@@ -6,18 +6,18 @@
     <form method="POST" action="{{ url_for('add_attendance') }}">
         <div class="form-group">
             <label for="staff_id">Staff Name:</label>
-            <form action="/add_attendance" method="POST">
-                <label for="staff_personal_id"></label>
-                <select class="form-control" id="staff_personal_id" name="staff_personal_id" required>
-                    {% for staff_personal_info in staff_personal_infos %}
-                    <option value="{{ staff_personal_info.staff_personal_id }}">{{ staff_personal_info.first_name }} {{ staff_personal_info.last_name }}</option>
-                    {% endfor %}
-                </select>                  
+            <select class="form-control" id="staff_personal_id" name="staff_personal_id" required>
+                <option value="" disabled selected>Select staff</option>
+                {% for staff_personal_info in staff_personal_infos %}
+                <option value="{{ staff_personal_info.staff_personal_id }}">{{ staff_personal_info.first_name }} {{ staff_personal_info.last_name }}</option>
+                {% endfor %}
+            </select>                  
         </div>
         
         <div class="form-group">
             <label for="leave_type">Leave Type:</label>
             <select class="form-control" id="leave_type" name="leave_type" required>
+                <option value="" disabled selected>Select leave type</option>
                 <option value="full day">Full Day</option>
                 <option value="first half">First Half</option>
                 <option value="second half">Second Half</option>
@@ -26,15 +26,15 @@
         </div>
         <div class="form-group">
             <label for="start_date">Start Date:</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" required>
+            <input type="date" class="form-control" id="start_date" name="start_date" required placeholder="Select start date">
         </div>
         <div class="form-group">
             <label for="end_date">End Date:</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" required>
+            <input type="date" class="form-control" id="end_date" name="end_date" required placeholder="Select end date">
         </div>
         <div class="form-group">
             <label for="remarks">Remarks:</label>
-            <input type="text" class="form-control" id="remarks" name="remarks" required>
+            <input type="text" class="form-control" id="remarks" name="remarks" required placeholder="Enter remarks">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

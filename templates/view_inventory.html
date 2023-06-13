@@ -10,15 +10,14 @@
                 <thead>
                     <tr>
                         <th>
-                            <a href="{{ url_for('view_inventory', order='asc') }}">
+                            <a href="{{ url_for('view_inventory', sort='inventory_id', order=(sort == 'inventory_id' and order == 'asc') and 'desc' or 'asc') }}">
                                 Inventory
-                                {% if order == 'asc' %}
-                                    <i class="fas fa-chevron-up"></i>
-                                {% endif %}
-                            </a>
-                            <a href="{{ url_for('view_inventory', order='desc') }}">
-                                {% if order == 'desc' %}
-                                    <i class="fas fa-chevron-down"></i>
+                                {% if sort == 'inventory_id' %}
+                                    {% if order == 'asc' %}
+                                        <i class="fas fa-chevron-up"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
                                 {% endif %}
                             </a>
                         </th>
@@ -44,7 +43,7 @@
             </table>
             <!-- Pagination -->
             <nav aria-label="Inventory Pagination">
-                <ul class="pagination justify-content-center">
+                <ul class="pagination justify-content-end">
                     {% if inventory_paginate.has_prev %}
                         <li class="page-item">
                             <a class="page-link" href="{{ url_for('view_inventory', page=inventory_paginate.prev_num, search_query=search_query) }}">Previous</a>

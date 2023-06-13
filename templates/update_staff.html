@@ -5,7 +5,7 @@
 <div class="container">
 
   <h1 style="text-align: center;">UPDATE STAFF</h1>
-  <form method="POST" action="{{ url_for('update_staff', staff_personal_id=staff_personal_info.staff_personal_id) }}">
+  <form method="POST" action="{{ url_for('update_staff', staff_personal_id=staff_personal_info.staff_personal_id) }}" enctype="multipart/form-data">
 
     <div class="row">
       <div class="col-md-6">
@@ -102,8 +102,17 @@
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a class="btn btn-secondary" href="{{ url_for('view_staff_one', staff_personal_id=staff_personal_info.staff_personal_id) }}">Cancel</a>
+    
+    <div class="form-group">
+      <label for="profile_picture">Profile Picture</label>
+      <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+    </div>
+    
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Update</button>
+      <a class="btn btn-secondary" href="{{ url_for('view_staff_one', staff_personal_id=staff_personal_info.staff_personal_id) }}">Cancel</a>
+    </div>
+    
   </form>
 </div>
 

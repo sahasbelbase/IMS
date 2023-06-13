@@ -27,7 +27,7 @@
                             <td>{{ attendance.leave_type }}</td>
                             <td>{{ attendance.start_date }}</td>
                             <td>{{ attendance.end_date }}</td>
-                            <td>{{ attendance.remarks }}</td>
+                            <td>{{ attendance.remarks|capitalize }}</td>
                             {% if session['user_id'] == 'ict' %}
                                 <td>
                                     <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>

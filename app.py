@@ -6,8 +6,10 @@ from datetime import datetime
 from flask import url_for
 from functools import wraps
 from uuid import uuid4
-from sqlalchemy import or_
+from sqlalchemy import or_, desc
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
+
 
 # Creating an instance of the Flask class
 app = Flask(__name__)
@@ -27,7 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Extension and function for allowing to upload different formats of images.
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -35,6 +37,9 @@ def allowed_file(filename):
 def get_file_extension(filename):
     return os.path.splitext(filename)[1] if filename else ''
 
+# Define the upload folder
+UPLOAD_FOLDER = os.path.join('C:', 'Users', 'Dell-UN', 'IMS_UN', 'static', 'staff_images')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #This is a class definition for an inventory, which inherits from the db.Model class.
 #This class will define the structure of the database table that will hold information about an inventory item.
@@ -71,9 +76,10 @@ class Inventory(db.Model):
 
 
 class StaffPersonalInfo(db.Model):
-    staff_personal_id = db.Column(db.BigInteger, primary_key=True)
+    staff_personal_id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(256), nullable=False)
     last_name = db.Column(db.String(256), nullable=False)
+    photo_filename = db.Column(db.String(256), nullable=True)
     gender = db.Column(db.String(256), nullable=False)
     dob = db.Column(db.String(256), nullable=False)
     contact_number = db.Column(db.String(256), nullable=False)
@@ -306,24 +312,29 @@ def add_inventory():
 
 
 
-@app.route('/view_inventory', methods=['GET'])
+@app.route('/view_inventory')
 def view_inventory():
-    order = request.args.get('order', 'asc')  # Get the order parameter from the URL
+    sort = request.args.get('sort', 'inventory_id')
+    order = request.args.get('order', 'asc')
 
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of items per page
 
-    if order == 'asc':
-        inventory_paginate = Inventory.query.join(Project).order_by(Inventory.inventory_id.asc()).paginate(page=page, per_page=per_page)
-    else:
-        inventory_paginate = Inventory.query.join(Project).order_by(Inventory.inventory_id.desc()).paginate(page=page, per_page=per_page)
+    query = Inventory.query.join(Project)
+
+    if sort == 'inventory_id':
+        if order == 'asc':
+            query = query.order_by(Inventory.inventory_id.asc())
+        else:
+            query = query.order_by(Inventory.inventory_id.desc())
+
+    inventory_paginate = query.paginate(page=page, per_page=per_page)
 
     search_query = request.args.get('search_query', '')
 
-    # Get the inventory items from the pagination object
     inventory_items = inventory_paginate.items
 
-    return render_template('view_inventory.html', inventory_paginate=inventory_paginate, inventory_items=inventory_items, search_query=search_query)
+    return render_template('view_inventory.html', inventory_paginate=inventory_paginate, inventory_items=inventory_items, sort=sort, order=order, search_query=search_query)
 
 
 
@@ -435,6 +446,7 @@ def delete_inventory(inventory_id):
 
     return redirect('/view_inventory')
 
+
 @app.route('/add_staff', methods=['GET', 'POST'])
 @login_required
 def add_staff():
@@ -475,6 +487,7 @@ def add_staff():
             staff_personal_id=staff_personal_id,
             first_name=first_name,
             last_name=last_name,
+            photo_filename=None,  # Set the initial value to None
             gender=gender,
             dob=dob,
             contact_number=contact_number,
@@ -527,25 +540,36 @@ def add_staff():
                 file_path = os.path.join('static/staff_images', filename)
                 file.save(file_path)
 
+                # Update the photo_filename column in staff_personal_info
+                staff_personal_info.photo_filename = filename
+
+                # Commit the changes to the database
+                db.session.commit()
+
         return redirect('/index')
 
     projects = Project.query.all()
+    return render_template('add_staff.html', projects=projects, staff_personal_info=None)
 
-    return render_template('add_staff.html', projects=projects)
 
 @app.route('/view_staff')
 def view_staff():
     search_query = request.args.get('search_query', '')
+    sort = request.args.get('sort', 'first_name')  # Default sorting by first name
+    order = request.args.get('order', 'asc')  # Default order as ascending
+
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of items per page
 
+    query = StaffOfficialInfo.query.join(StaffPersonalInfo)
+
     if search_query:
-        staffs = StaffOfficialInfo.query.filter(
+        query = query.filter(
             or_(
-                StaffOfficialInfo.staff_personal.has(StaffPersonalInfo.first_name.ilike(f'%{search_query}%')),
-                StaffOfficialInfo.staff_personal.has(StaffPersonalInfo.last_name.ilike(f'%{search_query}%')),
+                StaffPersonalInfo.first_name.ilike(f'%{search_query}%'),
+                StaffPersonalInfo.last_name.ilike(f'%{search_query}%'),
                 StaffOfficialInfo.department.ilike(f'%{search_query}%'),
-                StaffOfficialInfo.staff_personal.has(StaffPersonalInfo.contact_number.ilike(f'%{search_query}%')),
+                StaffPersonalInfo.contact_number.ilike(f'%{search_query}%'),
                 StaffOfficialInfo.work_email.ilike(f'%{search_query}%'),
                 StaffOfficialInfo.call_sign.ilike(f'%{search_query}%'),
                 StaffOfficialInfo.un_index_number.ilike(f'%{search_query}%'),
@@ -553,11 +577,30 @@ def view_staff():
                 StaffOfficialInfo.grade.ilike(f'%{search_query}%'),
                 StaffOfficialInfo.designation.ilike(f'%{search_query}%')
             )
-        ).paginate(page=page, per_page=per_page)
-    else:
-        staffs = StaffOfficialInfo.query.paginate(page=page, per_page=per_page)
+        )
 
-    return render_template('view_staff.html', staffs=staffs, search_query=search_query)
+    # Determine the column to sort by
+    if sort == 'first_name':
+        column = StaffPersonalInfo.first_name
+    elif sort == 'last_name':
+        column = StaffPersonalInfo.last_name
+    elif sort == 'contact_number':
+        column = StaffPersonalInfo.contact_number
+    elif sort == 'department':
+        column = StaffOfficialInfo.department
+    else:
+        column = StaffPersonalInfo.first_name  # Default sorting by first name
+
+    # Apply sorting based on the column and order
+    if order == 'asc':
+        query = query.order_by(column.asc())
+    else:
+        query = query.order_by(column.desc())
+
+    staffs = query.paginate(page=page, per_page=per_page)
+
+    return render_template('view_staff.html', staffs=staffs, search_query=search_query, sort=sort, order=order)
+
 
 @app.route('/view_staff_one/<int:staff_personal_id>')
 def view_staff_one(staff_personal_id):
@@ -581,6 +624,7 @@ def view_staff_one(staff_personal_id):
         contact_number=staff_official_info.staff_personal.contact_number if staff_official_info else None,
         get_file_extension=get_file_extension  
     )
+
 @app.route('/update_staff/<int:staff_personal_id>', methods=['GET', 'POST'])
 @login_required
 def update_staff(staff_personal_id):
@@ -596,13 +640,6 @@ def update_staff(staff_personal_id):
         return "Staff not found"
 
     staff_personal_info = staff_official_info.staff_personal
-
-        
-    name = StaffPersonalInfo.first_name
-    last = StaffPersonalInfo.last_name
-    cont = StaffPersonalInfo.contact_number
-
-    profile_picture = f"{name}_{last}_{cont}"
 
     if request.method == 'POST':
         # Update staff personal info
@@ -638,6 +675,15 @@ def update_staff(staff_personal_id):
         if project:
             staff_official_info.project = project
 
+        # Check if a new profile picture file was uploaded
+        if 'profile_picture' in request.files:
+            file = request.files['profile_picture']
+            if file.filename != '':
+                # Save the new profile picture with a secure filename
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                staff_personal_info.photo_filename = filename
+
         db.session.commit()
 
         # Create a new entry in StaffOfficialHistory
@@ -664,6 +710,7 @@ def update_staff(staff_personal_id):
     projects = Project.query.all()
 
     return render_template('update_staff.html', staff_personal_info=staff_personal_info, staff_official_info=staff_official_info, projects=projects)
+
 
 
 @app.route('/official_history/<int:staff_personal_id>', methods=['GET'])
@@ -743,17 +790,27 @@ def add_projects():
 @app.route('/view_projects')
 def view_projects():
     search_query = request.args.get('search_query', '')
+    sort_order = request.args.get('sort_order', 'asc')  # Default sort order is ascending
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of items per page
 
     if search_query:
         # Perform the search query to filter the projects
-        projects = Project.query.filter(Project.proj_name.ilike(f'%{search_query}%')).paginate(page=page, per_page=per_page)
+        projects = Project.query.filter(Project.proj_name.ilike(f'%{search_query}%'))
     else:
         # Retrieve all projects without filtering
-        projects = Project.query.paginate(page=page, per_page=per_page)
+        projects = Project.query
 
-    return render_template('view_projects.html', projects=projects, search_query=search_query)
+    # Sort the projects based on the sort order
+    if sort_order == 'asc':
+        projects = projects.order_by(Project.proj_id.asc())
+    elif sort_order == 'desc':
+        projects = projects.order_by(desc(Project.proj_id))
+
+    # Paginate the sorted projects
+    projects = projects.paginate(page=page, per_page=per_page)
+
+    return render_template('view_projects.html', projects=projects, search_query=search_query, sort_order=sort_order)
 
 
 
@@ -854,6 +911,7 @@ def add_attendance():
     return render_template('add_attendance.html', staff_personal_infos=staff_personal_infos)
 
 # Update attendance
+
 @app.route('/view_attendance')
 def view_attendance():
     page = request.args.get('page', 1, type=int)
@@ -865,12 +923,13 @@ def view_attendance():
         attendances = Attendance.query.join(StaffPersonalInfo).filter(
             (Attendance.staff_personal_id == StaffPersonalInfo.staff_personal_id) &
             (StaffPersonalInfo.name.ilike(f'%{search_query}%'))
-        ).paginate(page=page, per_page=per_page)
+        ).order_by(Attendance.att_id.desc()).paginate(page=page, per_page=per_page)
     else:
         # Retrieve all attendance records without filtering
-        attendances = Attendance.query.paginate(page=page, per_page=per_page)
+        attendances = Attendance.query.order_by(Attendance.att_id.desc()).paginate(page=page, per_page=per_page)
 
     return render_template('view_attendance.html', attendances=attendances, search_query=search_query)
+
 
 @app.route('/update_attendance/<int:att_id>', methods=['GET', 'POST'])
 @login_required

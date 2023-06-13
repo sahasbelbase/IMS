@@ -7,55 +7,55 @@
     <div class="form-group">
       <label for="proj_id">Project:</label>
       <select class="form-control" id="proj_id" name="proj_id" required>
+        <option value="">Select a Project</option> <!-- Added prewritten option -->
         {% for project in projects %}
         <option value="{{ project.proj_id }}">{{ project.proj_name }}</option>
         {% endfor %}
       </select>
-    </div>
-
+    </div>   
     <div class="form-group">
       <label for="equipment">Equipment:</label>
-      <input type="text" class="form-control" id="equipment" name="equipment" required>
+      <input type="text" class="form-control" id="equipment" name="equipment" required placeholder="Enter equipment">
     </div>
     <div class="form-group">
       <label for="technical_id">Technical ID:</label>
-      <input type="text" class="form-control" id="technical_id" name="technical_id" required>
+      <input type="text" class="form-control" id="technical_id" name="technical_id" required placeholder="Enter technical ID">
     </div>
     <div class="form-group">
       <label for="asset_id">Asset ID:</label>
-      <input type="text" class="form-control" id="asset_id" name="asset_id" required>
+      <input type="text" class="form-control" id="asset_id" name="asset_id" required placeholder="Enter asset ID">
     </div>
     <div class="form-group">
       <label for="inventory_labeling">Inventory Labeling:</label>
-      <input type="text" class="form-control" id="inventory_labeling" name="inventory_labeling" required>
+      <input type="text" class="form-control" id="inventory_labeling" name="inventory_labeling" required placeholder="Enter inventory labeling">
     </div>
     <div class="form-group">
       <label for="category">Category:</label>
-      <input type="text" class="form-control" id="category" name="category" required>
+      <input type="text" class="form-control" id="category" name="category" required placeholder="Enter category">
     </div>
     <div class="form-group">
       <label for="item">Item:</label>
-      <input type="text" class="form-control" id="item" name="item" required>
+      <input type="text" class="form-control" id="item" name="item" required placeholder="Enter item">
     </div>
     <div class="form-group">
       <label for="make">Make:</label>
-      <input type="text" class="form-control" id="make" name="make">
+      <input type="text" class="form-control" id="make" name="make" placeholder="Enter make">
     </div>
     <div class="form-group">
       <label for="model">Model:</label>
-      <input type="text" class="form-control" id="model" name="model" required>
+      <input type="text" class="form-control" id="model" name="model" required placeholder="Enter model">
     </div>
     <div class="form-group">
       <label for="serial_no">Serial Number:</label>
-      <input type="text" class="form-control" id="serial_no" name="serial_no" required>
+      <input type="text" class="form-control" id="serial_no" name="serial_no" required placeholder="Enter serial number">
     </div>
     <div class="form-group">
       <label for="document_type">Document Type:</label>
-      <input type="text" class="form-control" id="document_type" name="document_type">
+      <input type="text" class="form-control" id="document_type" name="document_type" placeholder="Enter document type">
     </div>
     <div class="form-group">
       <label for="document_id">Document ID:</label>
-      <input type="text" class="form-control" id="document_id" name="document_id">
+      <input type="text" class="form-control" id="document_id" name="document_id" placeholder="Enter document ID">
     </div>
     <div class="form-group">
       <label for="acquisition_date">Acquisition Date:</label>
@@ -63,43 +63,44 @@
     </div>
     <div class="form-group">
       <label for="amount">Amount:</label>
-      <input type="number" class="form-control" id="amount" name="amount" required>
+      <input type="number" class="form-control" id="amount" name="amount" required placeholder="Enter Amount">
     </div>
     <div class="form-group">
       <label for="exchange_rate">Exchange Rate:</label>
-      <input type="number" class="form-control" id="exchange_rate" name="exchange_rate" required>
+      <input type="number" class="form-control" id="exchange_rate" name="exchange_rate" required placeholder="Enter The Exchange Rate">
     </div>
     <div class="form-group">
       <label for="Amount_in_USD">Amount in USD:</label>
-      <input type="number" class="form-control" id="amount_in_usd" name="amount_in_usd" required>
+      <input type="number" class="form-control" id="amount_in_usd" name="amount_in_usd" required placeholder="Enter The Amount in USD">
     </div>
     <div class="form-group">
       <label for="warranty">Warranty:</label>
-      <input type="text" class="form-control" id="warranty" name="warranty">
+      <input type="text" class="form-control" id="warranty" name="warranty" placeholder="Enter warranty">
     </div>
     <div class="form-group">
       <label for="Location">Location:</label>
-      <input type="text" class="form-control" id="location" name="location">
+      <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
     </div>
     <div class="form-group">
       <label for="remark">Remark:</label>
-      <input type="text" class="form-control" id="remark" name="remark">
+      <input type="text" class="form-control" id="remark" name="remark" placeholder="Enter remark">
     </div>
     <div class="form-group">
       <label for="staff">Custodian Name:</label>
       <select class="form-control" id="staff" name="staff">
+        <option value="">Select a Custodian</option> <!-- Added prewritten option -->
         {% for staff_member in staff_members %}
         <option value="{{ staff_member.staff_personal_id }}">{{ staff_member.first_name }} {{ staff_member.last_name }}</option>
         {% endfor %}
       </select>
-    </div>
+    </div>  
     <div class="form-group">
       <label for="status">Status:</label>
-      <input type="text" class="form-control" id="status" name="status">
+      <input type="text" class="form-control" id="status" name="status" placeholder="Enter status">
     </div>
     <div class="form-group">
       <label for="internal_remark">Internal Remark:</label>
-      <input type="text" class="form-control" id="internal_remark" name="internal_remark">
+      <input type="text" class="form-control" id="internal_remark" name="internal_remark" placeholder="Enter internal remark">
     </div>
     <div class="form-group">
       <label for="included_in_hq">Included in HQ:</label>
@@ -118,10 +119,25 @@
 
 {% block scripts %}
 <script>
-  // Get the pop-up element by ID
-  const popup = document.getElementById('popup');
+  // JavaScript to hide placeholder text when the input is focused
+  const inputs = document.querySelectorAll('input, textarea');
 
-  // Show the pop-up message
+  inputs.forEach((input) => {
+    const placeholderText = input.getAttribute('placeholder');
+
+    input.addEventListener('focus', () => {
+      input.setAttribute('placeholder', '');
+    });
+
+    input.addEventListener('blur', () => {
+      if (input.value === '') {
+        input.setAttribute('placeholder', placeholderText);
+      }
+    });
+  });
+
+  // Show the pop-up message after submitting the form
+  const popup = document.getElementById('popup');
   popup.style.display = 'block';
 
   // Hide the pop-up message after 3 seconds

@@ -6,6 +6,9 @@
     <!-- Add Bootstrap stylesheet link -->
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Add Font Awesome stylesheet link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-xmfFxw8Bzol6v7kKQhQ2Om8mOO2r5p0Bbb+zAVa0Ukg8bABVp0tjC6kGkcg5QQRh" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
@@ -13,22 +16,22 @@
     <div class="container">
         <!-- Logo and contact info -->
         <div class="row align-items-start">
-          <div class="col-lg-6">
-            <a href="{{ url_for('index') }}"><img class="logo" src="/static/logo.png" alt="Logo"></a>
-          </div>
-      
-          <div class="col-12 col-md-6 text-right contact-info">
-            <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
-            <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
-            <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
-            <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
-          </div>
-        
-        </div><br><br>
+            <div class="col-lg-6">
+                <a href="{{ url_for('index') }}"><img class="logo" src="/static/logo.png" alt="Logo"></a>
+            </div>
+          
+            <div class="col-12 col-md-6 text-right contact-info">
+                <p class="text-uppercase mb-0">United Nations Human Settlement Programme</p>
+                <p class="mb-0">P.O.Box 107, Kathmandu, Nepal | Sanepa Height, Lalitpur, Nepal</p>
+                <p class="mb-0"><a href="mailto:unhabitat.nepal@unhabitat.org.np" class="text-primary">unhabitat.nepal@unhabitat.org.np</a> | <a href="http://www.unhabitat.org.np" class="text-primary">www.unhabitat.org.np</a></p>
+                <h5 class="text-uppercase text-primary mt-2">FOR BETTER URBAN FUTURE</h5>
+            </div>
+        </div><br>
         
 
-       <!--navbar-->
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -40,6 +43,13 @@
                 </div>
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <div class="btn btn-outline-primary btn-sm btn-box" style="padding: 6px;">
+                                <i class="fas fa-home"></i> Home
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/logout">
                             <div class="btn btn-outline-danger btn-sm btn-box" style="padding: 6px;">
                                 Logout
@@ -48,7 +58,8 @@
                     </li>
                 </ul>
             </div>
-        </nav><br>
+        </nav>
+
 
         {% block content %}
         {% endblock %}
