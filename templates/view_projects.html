@@ -9,7 +9,7 @@
                     <tr>
                         <th><a href="{{ url_for('view_projects', sort_order='asc', search_query=search_query) }}">Project Name</a></th>
                         <th><a href="{{ url_for('view_projects', sort_order='asc', search_query=search_query) }}">Project ID</a></th>
-                        <th><a href="{{ url_for('view_projects', sort_order='asc', search_query=search_query) }}">Doner</a></th>
+                        <th><a href="{{ url_for('view_projects', sort_order='asc', search_query=search_query) }}">Donor</a></th>
                         <th><strong>Description</strong></th>
                         {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
                             <th><strong>Action</strong></th>
@@ -21,7 +21,7 @@
                         <tr>
                             <td>{{ project.proj_name }}</td>
                             <td>{{ project.proj_id }}</td>
-                            <td>{{ project.doner }}</td>
+                            <td>{{ project.donor }}</td>
                             <td>{{ project.description }}</td>
                             <td>
                                 <!-- In your HTML template -->

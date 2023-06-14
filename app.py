@@ -37,21 +37,23 @@ def allowed_file(filename):
 def get_file_extension(filename):
     return os.path.splitext(filename)[1] if filename else ''
 
-# Define the upload folder
-UPLOAD_FOLDER = os.path.join('C:', 'Users', 'Dell-UN', 'IMS_UN', 'static', 'staff_images')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = 'static/staff_images'
+
 
 #This is a class definition for an inventory, which inherits from the db.Model class.
 #This class will define the structure of the database table that will hold information about an inventory item.
 
+
+
 class Inventory(db.Model):
+    __tablename__ = 'inventory'
     inventory_id = db.Column(db.Integer, primary_key=True)
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
     project = db.relationship('Project', backref='inventory_items')
     equipment = db.Column(db.String(256), nullable=False)
     technical_id = db.Column(db.String(256), nullable=False)
     staff_personal_id = db.Column(db.Integer, db.ForeignKey('staff_personal_info.staff_personal_id'))
-    staff_personal = db.relationship('StaffPersonalInfo', backref=db.backref('inventory_items'))
+    staff_personal = db.relationship('StaffPersonalInfo', backref='inventory_items')
     asset_id = db.Column(db.String(256), nullable=False)
     inventory_labeling = db.Column(db.String(256), nullable=False)
     category = db.Column(db.String(256), nullable=False)
@@ -74,9 +76,9 @@ class Inventory(db.Model):
     row_created = db.Column(db.DateTime, default=datetime.utcnow)
     row_updated_date = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-
 class StaffPersonalInfo(db.Model):
-    staff_personal_id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    __tablename__ = 'staff_personal_info'
+    staff_personal_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(256), nullable=False)
     last_name = db.Column(db.String(256), nullable=False)
     photo_filename = db.Column(db.String(256), nullable=True)
@@ -91,10 +93,10 @@ class StaffPersonalInfo(db.Model):
 
     staff_official_info = db.relationship('StaffOfficialInfo', backref='official_info', uselist=False)
 
-
 class StaffOfficialInfo(db.Model):
+    __tablename__ = 'staff_official_info'
     staff_official_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    staff_personal_id = db.Column(db.String(255), db.ForeignKey('staff_personal_info.staff_personal_id', ondelete='CASCADE'), unique=True)
+    staff_personal_id = db.Column(db.Integer, db.ForeignKey('staff_personal_info.staff_personal_id', ondelete='CASCADE'), unique=True)
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
     project = db.relationship('Project', backref='staff_officials')
     department = db.Column(db.String(256), nullable=False)
@@ -110,8 +112,8 @@ class StaffOfficialInfo(db.Model):
 
     staff_personal = db.relationship('StaffPersonalInfo', backref='staff_official', uselist=False)
 
-
 class StaffOfficialHistory(db.Model):
+    __tablename__ = 'staff_official_history'
     id = db.Column(db.Integer, primary_key=True)
     staff_official_id = db.Column(db.Integer, db.ForeignKey('staff_official_info.staff_official_id', ondelete='CASCADE'))
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
@@ -128,20 +130,17 @@ class StaffOfficialHistory(db.Model):
 
     staff_official = db.relationship('StaffOfficialInfo', backref='history', uselist=False)
 
-
-
 class Project(db.Model):
+    __tablename__ = 'project'
     proj_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     proj_name = db.Column(db.String(256), nullable=False)
-    doner = db.Column(db.String(256), nullable=False)
+    donor = db.Column(db.String(256), nullable=False)
     description = db.Column(db.String(256), nullable=False)
     is_active = db.Column(db.Enum('yes', 'no'), nullable=False)
     row_created = db.Column(db.DateTime, nullable=False)
     row_updated_date = db.Column(db.DateTime, nullable=False)
 
-# This is a class definition for an Attendance, which inherits from the db.Model class.
-# This class will define the structure of the database table that will hold information about attendance.
-#This class will define the structure of the database table that will hold information about attendance.
+
 class Attendance(db.Model):
     __tablename__ = 'attendance'
 
@@ -164,6 +163,7 @@ class Attendance(db.Model):
         self.remarks = remarks
         self.row_created = row_created
         self.row_updated_date = row_updated_date
+
 
 
 
@@ -527,7 +527,7 @@ def add_staff():
         except IntegrityError:
             # Handle the foreign key constraint failure
             db.session.rollback()
-            return "Invalid staff_personal_id"
+            return redirect('/index')
 
         # Check if the POST request has a file part
         if 'Image' in request.files:
@@ -606,6 +606,7 @@ def view_staff():
 def view_staff_one(staff_personal_id):
     staff_official_info = StaffOfficialInfo.query.filter_by(staff_personal_id=staff_personal_id).first()
     project_name = None
+    profile_picture = None
 
     if staff_official_info:
         project = Project.query.get(staff_official_info.proj_id)
@@ -614,15 +615,17 @@ def view_staff_one(staff_personal_id):
         else:
             project_name = "Project not found"
 
+        staff_personal = staff_official_info.staff_personal
+
+        if staff_personal.photo_filename:
+            profile_picture = url_for('static', filename=f'staff_images/{staff_personal.photo_filename}')
+
     return render_template(
         'view_staff_one.html',
         staffofficial=staff_official_info,
-        staffpersonal=staff_official_info.staff_personal if staff_official_info else None,
+        staffpersonal=staff_personal,
         project_name=project_name,
-        first_name=staff_official_info.staff_personal.first_name if staff_official_info else None,
-        last_name=staff_official_info.staff_personal.last_name if staff_official_info else None,
-        contact_number=staff_official_info.staff_personal.contact_number if staff_official_info else None,
-        get_file_extension=get_file_extension  
+        profile_picture=profile_picture
     )
 
 @app.route('/update_staff/<int:staff_personal_id>', methods=['GET', 'POST'])
@@ -680,7 +683,7 @@ def update_staff(staff_personal_id):
             file = request.files['profile_picture']
             if file.filename != '':
                 # Save the new profile picture with a secure filename
-                filename = secure_filename(file.filename)
+                filename = secure_filename(f"{staff_personal_info.first_name}_{staff_personal_info.last_name}_{staff_personal_info.contact_number}.{file.filename.rsplit('.', 1)[1].lower()}")
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 staff_personal_info.photo_filename = filename
 
@@ -710,6 +713,7 @@ def update_staff(staff_personal_id):
     projects = Project.query.all()
 
     return render_template('update_staff.html', staff_personal_info=staff_personal_info, staff_official_info=staff_official_info, projects=projects)
+
 
 
 
@@ -764,14 +768,14 @@ def add_projects():
     if request.method == 'POST':
         # Extract the data from the form
         proj_name = request.form['proj_name'].capitalize()
-        doner = request.form['doner']
+        donor = request.form['donor']
         description = request.form['description']
         is_active = request.form['is_active']
         
         # Create a new Project object with the extracted data
         project = Project(
             proj_name=proj_name,
-            doner=doner,
+            donor=donor,
             description=description,
             is_active=is_active,
             row_created = datetime.now(),
@@ -828,7 +832,7 @@ def update_project(proj_id):
     if request.method == 'POST':
         # Update the project with the form data
         project.proj_name = request.form['proj_name'].capitalize()
-        project.doner = request.form['doner']
+        project.donor = request.form['donor']
         project.description = request.form['description']
         project.is_active = request.form['is_active']
         project.row_updated_date = datetime.now()

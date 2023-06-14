@@ -42,6 +42,10 @@
           <textarea class="form-control" id="address" name="address" placeholder="Enter address"></textarea>
         </div>
         <div class="form-group">
+          <label for="emergency_contact_number">Emergency Contact Number:</label>
+          <input type="text" class="form-control" id="emergency_contact_number" name="emergency_contact_number" required placeholder="Enter emergency contact number">
+        </div>
+        <div class="form-group">
           <label for="disability_type">Disability Type:</label>
           <select class="form-control" id="disability_type" name="disability_type" required>
             <option value="" {% if not staff_personal_info.disability_type %}selected{% endif %}>Select Yes or No</option>
@@ -82,10 +86,7 @@
           <label for="work_email">Work Email:</label>
           <input type="email" class="form-control" id="work_email" name="work_email" placeholder="Enter work email">
         </div>
-        <div class="form-group">
-          <label for="emergency_contact_number">Emergency Contact Number:</label>
-          <input type="text" class="form-control" id="emergency_contact_number" name="emergency_contact_number" required placeholder="Enter emergency contact number">
-        </div>
+        
         <div class="form-group">
           <label for="department">Department:</label>
           <input type="text" class="form-control" id="department" name="department" required placeholder="Enter department">
@@ -120,7 +121,7 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="customFile">Upload Profile Picture:</label>
-          <input type="file" class="form-control" id="Photo" name="Image" accept="image/*">
+          <input type="file" class="form-control" id="profile-picture" name="Image" accept="image/*">
         </div>        
       </div>
     </div>

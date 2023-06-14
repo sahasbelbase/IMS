@@ -21,8 +21,10 @@
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 {% if staffpersonal and staffpersonal.photo_filename %}
-                                <img class="img-fluid profile-image" src="{{ url_for('static', filename='staff_images/' ~ staffpersonal.photo_filename) }}" alt="Profile Picture" id="profile-picture">
+                                <!-- If staff personal object exists and has a photo filename -->
+                                    <img class="img-fluid profile-image" src="{{ url_for('static', filename='staff_images/' ~ staffpersonal.photo_filename) }}" alt="Profile Picture" id="profile-picture">
                                 {% else %}
+                                <!-- If staff personal object doesn't exist or doesn't have a photo filename -->
                                 <img class="img-fluid rounded-circle profile-image" src="{{ url_for('static', filename='staff_images/default_photo.png') }}" alt="Default Profile Picture" id="profile-picture">
                                 {% endif %}
                                 
@@ -63,6 +65,7 @@
                     <p>Personal email: {{ staffpersonal.personal_email }}</p>
                     <p>Contact: {{ staffpersonal.contact_number }}</p>
                     <p>Address: {{ staffpersonal.address|capitalize }}</p>
+                    <p>Emergency Contact Number: {{ staffpersonal.emergency_contact_number }}</p>
                     <p>Disability Type: {{ staffpersonal.disability_type|capitalize }}</p>
                 </div>
             </div>
@@ -70,8 +73,7 @@
                 <div class="info-box">
                     <h2>Official Info</h2>
                     <p>Allocated Project: {{ project_name }}</p>
-                    <p>Work email: {{ staffofficial.work_email }}</p>
-                    <p>Emergency Contact Number: {{ staffpersonal.emergency_contact_number }}</p>
+                    <p>Work email: {{ staffofficial.work_email }}</p>                    
                     <p>Department: {{ staffofficial.department|capitalize }}</p>
                     <p>Call Sign: {{ staffofficial.call_sign|capitalize }}</p>
                     <p>Index Number: {{ staffofficial.un_index_number|capitalize }}</p>
