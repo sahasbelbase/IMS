@@ -21,8 +21,8 @@
                                 {% endif %}
                             </a>
                         </th>
-                        <th>Project</th>
                         <th>Equipment</th>
+                        <th>Project</th>
                         <th>Category</th>
                         <th>Item</th>
                         <th>Action</th>
@@ -32,8 +32,8 @@
                     {% for inventory_item in inventory_items %}
                         <tr>
                             <td>{{ inventory_item.inventory_id }}</td>
-                            <td>{{ inventory_item.project.proj_name }}</td>
                             <td>{{ inventory_item.equipment }}</td>
+                            <td>{{ inventory_item.project.proj_name }}</td>
                             <td>{{ inventory_item.category }}</td>
                             <td>{{ inventory_item.item }}</td>
                             <td><a href="{{ url_for('view_inventory_one', inventory_id=inventory_item.inventory_id) }}">View</a></td>

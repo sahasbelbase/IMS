@@ -33,6 +33,10 @@
             color: #999;
             font-style: italic;
         }
+
+        .back-button {
+            margin-top: 20px;
+        }
     </style>
 
     <h1>Official History</h1>
@@ -61,6 +65,7 @@
                     <th>Contract Type</th>
                     <th>Grade</th>
                     <th>Designation</th>
+                    <th>Project Name</th>
                     <th>Created Date</th>
                 </tr>
             </thead>
@@ -76,6 +81,7 @@
                         <td>{{ history.contract_type }}</td>
                         <td>{{ history.grade }}</td>
                         <td>{{ history.designation }}</td>
+                        <td>{{ history.project.proj_name }}</td>
                         <td>{{ history.created_date }}</td>
                     </tr>
                 {% endfor %}
@@ -84,4 +90,13 @@
     {% else %}
         <p class="no-history">No previous official history available.</p>
     {% endif %}
+
+   
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ url_for('view_staff_one', staff_personal_id=staff_personal_info.staff_personal_id) }}" class="btn btn-primary">Back</a>&nbsp;&nbsp;
+            </div>
+        </div>
+    </div>   
 {% endblock %}

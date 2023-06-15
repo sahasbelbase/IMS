@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask import url_for
 from functools import wraps
-from sqlalchemy import or_, func
+from sqlalchemy import or_, desc
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
@@ -92,7 +92,6 @@ class StaffPersonalInfo(db.Model):
 
     staff_official_info = db.relationship('StaffOfficialInfo', backref='official_info', uselist=False)
 
-
 class StaffOfficialInfo(db.Model):
     __tablename__ = 'staff_official_info'
     staff_official_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -117,7 +116,7 @@ class StaffOfficialHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     staff_official_id = db.Column(db.Integer, db.ForeignKey('staff_official_info.staff_official_id', ondelete='CASCADE'))
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
-    project = db.relationship('Project', backref='staff_history')
+    project = db.relationship('Project', backref='staff_officials_history')
     department = db.Column(db.String(256), nullable=False)
     work_email = db.Column(db.String(256), nullable=False)
     call_sign = db.Column(db.String(256), nullable=False)
@@ -333,33 +332,15 @@ def view_inventory():
         else:
             query = query.order_by(Inventory.inventory_id.desc())
 
+    inventory_paginate = query.paginate(page=page, per_page=per_page)
+
     search_query = request.args.get('search_query', '')
 
-    if search_query:
-        query = query.filter(
-            or_(
-                Inventory.equipment.ilike(f'%{search_query}%'),
-                Inventory.technical_id.ilike(f'%{search_query}%'),
-                Inventory.asset_id.ilike(f'%{search_query}%'),
-                Inventory.inventory_labeling.ilike(f'%{search_query}%'),
-                Inventory.category.ilike(f'%{search_query}%'),
-                Inventory.item.ilike(f'%{search_query}%'),
-                Inventory.make.ilike(f'%{search_query}%'),
-                Inventory.model.ilike(f'%{search_query}%'),
-                Inventory.serial_no.ilike(f'%{search_query}%'),
-                Inventory.document_type.ilike(f'%{search_query}%'),
-                Inventory.document_id.ilike(f'%{search_query}%'),
-                Inventory.location.ilike(f'%{search_query}%'),
-                Inventory.remark.ilike(f'%{search_query}%'),
-                Inventory.status.ilike(f'%{search_query}%'),
-                Inventory.internal_remark.ilike(f'%{search_query}%')
-            )
-        )
-
-    inventory_paginate = query.paginate(page=page, per_page=per_page)
     inventory_items = inventory_paginate.items
 
     return render_template('view_inventory.html', inventory_paginate=inventory_paginate, inventory_items=inventory_items, sort=sort, order=order, search_query=search_query)
+
+
 
 
 #view_inventory_one
@@ -373,7 +354,36 @@ def view_inventory_one(inventory_id):
         return render_template('view_inventory_one.html', inventory_item=inventory_item, project=project)
     else:
         return 'Inventory item not found'
- 
+    
+
+@app.route('/search_inventory', methods=['GET'])
+def search_inventory():
+    search_query = request.args.get('search_query', '')
+
+    # Perform the search query on the inventory items
+    inventory_items = Inventory.query.filter(
+        or_(
+            Inventory.equipment.ilike(f'%{search_query}%'),
+            Inventory.technical_id.ilike(f'%{search_query}%'),
+            Inventory.asset_id.ilike(f'%{search_query}%'),
+            Inventory.inventory_labeling.ilike(f'%{search_query}%'),
+            Inventory.category.ilike(f'%{search_query}%'),
+            Inventory.item.ilike(f'%{search_query}%'),
+            Inventory.make.ilike(f'%{search_query}%'),
+            Inventory.model.ilike(f'%{search_query}%'),
+            Inventory.serial_no.ilike(f'%{search_query}%'),
+            Inventory.document_type.ilike(f'%{search_query}%'),
+            Inventory.document_id.ilike(f'%{search_query}%'),
+            Inventory.location.ilike(f'%{search_query}%'),
+            Inventory.remark.ilike(f'%{search_query}%'),
+            Inventory.status.ilike(f'%{search_query}%'),
+            Inventory.internal_remark.ilike(f'%{search_query}%')
+        )
+    ).all()
+
+    return render_template('view_inventory.html', inventory_items=inventory_items, search_query=search_query)
+
+
 
 @app.route('/update_inventory/<int:inventory_id>', methods=['GET', 'POST'])
 @login_required
@@ -702,6 +712,8 @@ def update_staff(staff_personal_id):
     return render_template('update_staff.html', staff_personal_info=staff_personal_info, staff_official_info=staff_official_info, projects=projects)
 
 
+
+
 @app.route('/official_history/<int:staff_personal_id>', methods=['GET'])
 def official_history(staff_personal_id):
     # Retrieve staff personal info and staff official info from the database
@@ -718,6 +730,7 @@ def official_history(staff_personal_id):
                            staff_official_info=staff_official_info, staff_official_history=staff_official_history,
                            project=project)
 
+
 @app.route('/delete_staff/<int:staff_personal_id>')
 @login_required
 def delete_staff(staff_personal_id):
@@ -731,15 +744,14 @@ def delete_staff(staff_personal_id):
     if staff_personal_info:
         staff_official_info = staff_personal_info.staff_official_info
         if staff_official_info:
-            # Update the foreign key reference in the attendance table to NULL
-            Attendance.query.filter_by(staff_personal_id=staff_personal_id).update({Attendance.staff_personal_id: None})
-
             db.session.delete(staff_official_info)
 
         db.session.delete(staff_personal_info)
         db.session.commit()
 
     return redirect('/view_staff')
+
+
 
 @app.route('/add_projects', methods=['GET', 'POST'])
 @login_required
@@ -779,7 +791,6 @@ def add_projects():
 @app.route('/view_projects')
 def view_projects():
     search_query = request.args.get('search_query', '')
-    sort_by = request.args.get('sort_by', 'proj_name')  # Default sort column is 'proj_name'
     sort_order = request.args.get('sort_order', 'asc')  # Default sort order is ascending
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of items per page
@@ -791,27 +802,17 @@ def view_projects():
         # Retrieve all projects without filtering
         projects = Project.query
 
-    # Sort the projects based on the sort column and sort order
-    if sort_by == 'proj_name':
-        if sort_order == 'asc':
-            projects = projects.order_by(func.lower(Project.proj_name).asc())
-        else:
-            projects = projects.order_by(func.lower(Project.proj_name).desc())
-    elif sort_by == 'proj_id':
-        if sort_order == 'asc':
-            projects = projects.order_by(Project.proj_id.asc())
-        else:
-            projects = projects.order_by(Project.proj_id.desc())
-    elif sort_by == 'donor':
-        if sort_order == 'asc':
-            projects = projects.order_by(func.lower(Project.donor).asc())
-        else:
-            projects = projects.order_by(func.lower(Project.donor).desc())
+    # Sort the projects based on the sort order
+    if sort_order == 'asc':
+        projects = projects.order_by(Project.proj_id.asc())
+    elif sort_order == 'desc':
+        projects = projects.order_by(desc(Project.proj_id))
 
     # Paginate the sorted projects
     projects = projects.paginate(page=page, per_page=per_page)
 
-    return render_template('view_projects.html', projects=projects, search_query=search_query, sort_by=sort_by, sort_order=sort_order)
+    return render_template('view_projects.html', projects=projects, search_query=search_query, sort_order=sort_order)
+
 
 
 
