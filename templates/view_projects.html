@@ -11,10 +11,10 @@
                             <a href="{{ url_for('view_projects', sort_by='proj_name', sort_order=sort_order, search_query=search_query) }}">Project Name</a>
                         </th>
                         <th>
-                            <a href="{{ url_for('view_projects', search_query=search_query) }}">Project ID</a>
+                            <a href="{{ url_for('view_projects', sort_by='proj_id', sort_order=sort_order, search_query=search_query) }}">Project ID</a>
                         </th>
                         <th>
-                            <a href="{{ url_for('view_projects', search_query=search_query) }}">Donor</a>
+                            <a href="{{ url_for('view_projects', sort_by='donor', sort_order=sort_order, search_query=search_query) }}">Donor</a>
                         </th>
                         <th><strong>Description</strong></th>
                         {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}

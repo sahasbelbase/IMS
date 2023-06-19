@@ -110,64 +110,15 @@
         <option value="disposal">Disposal</option>
       </select>
     </div><br>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary"  onclick="showPopup()">Submit</button>
 </form>
 </div>
 
-<div class="modal" id="successModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Inventory Added</h5>
-      </div>
-      <div class="modal-body">
-        <p>Inventory has been successfully added.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<style>
-  .btn-custom {
-    background-color: rgb(81, 178, 250);
-    color: white;
-  }
 </style>
-
 <script>
-  document.querySelector('form').addEventListener('submit', function(event) {
-    var isFormValid = validateForm(); // Function to validate the form (check if all required fields are filled)
-    
-    if (isFormValid) {
-      showSuccessModal();
-    } else {
-      event.preventDefault(); // Prevent form submission if the form is not valid
-    }
-  });
-
-  function showSuccessModal() {
-    var modal = new bootstrap.Modal(document.getElementById('successModal'));
-    modal.show();
-  }
-
-  function validateForm() {
-    // Add your form validation logic here
-    // Return true if the form is valid, false otherwise
-    // Example: Check if all required fields are filled
-    var requiredFields = document.querySelectorAll('[required]');
-    var isFormValid = true;
-    
-    for (var i = 0; i < requiredFields.length; i++) {
-      if (!requiredFields[i].value) {
-        isFormValid = false;
-        break;
-      }
-    }
-    
-    return isFormValid;
+  function showPopup() {
+      alert("Inventory Added");
   }
 </script>
 {% endblock %}

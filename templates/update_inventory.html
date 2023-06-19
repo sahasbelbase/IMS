@@ -113,7 +113,12 @@
         <option value="disposal" {% if inventory.included_in_hq == 'disposal' %}selected{% endif %}>Disposal</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary"  onclick="showPopup()">Submit</button>
   </form>
 </div>
+<script>
+  function showPopup() {
+      alert("Inventory updated");
+  }
+</script>
 {% endblock %}

@@ -679,12 +679,13 @@ def update_staff(staff_personal_id):
         # Create a new entry in StaffOfficialHistory
         staff_official_history = StaffOfficialHistory(
             staff_official_id=staff_official_info.staff_official_id,
-            joining_date=staff_official_info.joining_date,
-            last_working_date=datetime.now().date().strftime("%Y-%m-%d"),
+            proj_id=project_id,  # Set the proj_id to the updated project ID
             department=staff_official_info.department,
             work_email=staff_official_info.work_email,
             call_sign=staff_official_info.call_sign,
             un_index_number=staff_official_info.un_index_number,
+            joining_date=staff_official_info.joining_date,
+            last_working_date=datetime.now().date().strftime("%Y-%m-%d"),
             contract_type=staff_official_info.contract_type,
             grade=staff_official_info.grade,
             designation=staff_official_info.designation
@@ -717,6 +718,7 @@ def official_history(staff_personal_id):
     return render_template('official_history.html', staff_personal_info=staff_personal_info,
                            staff_official_info=staff_official_info, staff_official_history=staff_official_history,
                            project=project)
+
 
 @app.route('/delete_staff/<int:staff_personal_id>')
 @login_required
@@ -775,7 +777,6 @@ def add_projects():
     return render_template('add_projects.html')
 
 # Define the route for viewing projects
-
 @app.route('/view_projects')
 def view_projects():
     search_query = request.args.get('search_query', '')

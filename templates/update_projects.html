@@ -23,8 +23,13 @@
         <option value="no" {% if project.is_active == 'no' %}selected{% endif %}>No</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary" onclick="showPopup()">Update</button>
     <a href="{{ url_for('view_projects') }}" class="btn btn-secondary">Cancel</a>
   </form>
 </div>
+<script>
+  function showPopup() {
+      alert("Project updated");
+  }
+</script>
 {% endblock %}

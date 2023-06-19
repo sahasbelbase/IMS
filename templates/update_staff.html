@@ -109,11 +109,15 @@
     </div>
     
     <div class="form-group">
-      <button type="submit" class="btn btn-primary">Update</button>
+      <button type="submit" class="btn btn-primary" onclick="showPopup()">Update</button>
       <a class="btn btn-secondary" href="{{ url_for('view_staff_one', staff_personal_id=staff_personal_info.staff_personal_id) }}">Cancel</a>
     </div>
     
   </form>
 </div>
-
+<script>
+  function showPopup() {
+      alert("Staff Updated");
+  }
+</script>
 {% endblock %}

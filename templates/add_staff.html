@@ -126,62 +126,12 @@
         </div>        
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <button type="submit" class="btn btn-primary" onclick="showPopup()">Submit</button>
+  </form>
 </div>
-
-<div class="modal" id="successModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Staff Added</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Staff has been successfully added.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-  document.querySelector('form').addEventListener('submit', function(event) {
-    var isFormValid = validateForm(); // Function to validate the form (check if all required fields are filled)
-
-    if (isFormValid) {
-      showSuccessModal();
-    } else {
-      event.preventDefault(); // Prevent form submission if the form is not valid
+    function showPopup() {
+        alert("Staff Added");
     }
-  });
-
-  function showSuccessModal() {
-    var modal = new bootstrap.Modal(document.getElementById('successModal'));
-    modal.show();
-
-    setTimeout(function() {
-      modal.hide();
-    }, 3000); // Delay for 3 seconds (3000 milliseconds) before hiding the modal
-  }
-  
-  function validateForm() {
-    // Add your form validation logic here
-    // Return true if the form is valid, false otherwise
-    // Example: Check if all required fields are filled
-    var requiredFields = document.querySelectorAll('[required]');
-    var isFormValid = true;
-    
-    for (var i = 0; i < requiredFields.length; i++) {
-      if (!requiredFields[i].value) {
-        isFormValid = false;
-        break;
-      }
-    }
-    
-    return isFormValid;
-  }
 </script>
 {% endblock %}
