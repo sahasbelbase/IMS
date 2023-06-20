@@ -20,8 +20,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for attendance in attendances.items %}
-                        <tr>
+                            {% for attendance in attendances.items %}
+                            <tr>
                             <td>{{ attendance.att_id }}</td>
                             <td>{{ attendance.staff_personal.first_name }} {{ attendance.staff_personal.last_name }}</td>
                             <td>{{ attendance.leave_type }}</td>
@@ -29,18 +29,24 @@
                             <td>{{ attendance.end_date }}</td>
                             <td>{{ attendance.remarks|capitalize }}</td>
                             {% if session['user_id'] == 'ict' %}
-                                <td>
-                                    <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
-                                    <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger">Delete</a>
-                                </td>
+                            <td>
+                                <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                                <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger" onclick="return confirmDelete()">Delete</a>
+                            </td>
                             {% elif session['user_id'] == 'operator' %}
-                                <td>
-                                    <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
-                                </td>
+                            <td>
+                                <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                            </td>
                             {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                            </tr>
+                            {% endfor %}
+                      </tbody>
+                      
+                      <script>
+                        function confirmDelete() {
+                          return confirm("Are you sure you want to delete?");
+                        }
+                      </script>
                 </table>
                 <!-- Pagination links -->
                 <nav aria-label="Attendance pagination">

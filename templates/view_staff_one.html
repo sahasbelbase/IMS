@@ -93,8 +93,15 @@
             <div class="col-md-12">
                 <a href="{{ url_for('view_staff') }}" class="btn btn-primary">Back</a>&nbsp;&nbsp;
                 {% if session['user_id'] == 'ict' %}
-                    <a href="{{ url_for('delete_staff', staff_personal_id=staffpersonal.staff_personal_id) }}" class="btn btn-danger" style="justify-content: left;">Delete</a>&nbsp;&nbsp;
+                <a href="{{ url_for('delete_staff', staff_personal_id=staffpersonal.staff_personal_id) }}" class="btn btn-danger" style="justify-content: left;" onclick="return confirmDelete()">Delete</a>&nbsp;&nbsp;
                 {% endif %}
+
+                <script>
+                function confirmDelete() {
+                    const confirmed = confirm("Are you sure you want to delete?");
+                    return confirmed;
+                }
+                </script>
                 {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
                     <a href="{{ url_for('update_staff', staff_personal_id=staffpersonal.staff_personal_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>
                 {% endif %}

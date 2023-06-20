@@ -8,20 +8,26 @@
                 <thead>
                     <tr>
                         <th>
-                            <a href="{{ url_for('view_projects', sort_by='proj_name', sort_order=sort_order, search_query=search_query) }}">Project Name</a>
+                            <a href="{{ url_for('view_projects', search_query=search_query, sort_order=next_sort_order) }}">
+                                Project Name
+                                {% if sort_order == 'asc' %}
+                                    <i class="fas fa-sort-up"></i>
+                                {% elif sort_order == 'desc' %}
+                                    <i class="fas fa-sort-down"></i>
+                                {% else %}
+                                    <i class="fas fa-sort"></i>
+                                {% endif %}
+                            </a>
                         </th>
-                        <th>
-                            <a href="{{ url_for('view_projects', sort_by='proj_id', sort_order=sort_order, search_query=search_query) }}">Project ID</a>
-                        </th>
-                        <th>
-                            <a href="{{ url_for('view_projects', sort_by='donor', sort_order=sort_order, search_query=search_query) }}">Donor</a>
-                        </th>
+                        <th>Project ID</th>
+                        <th>Donor</th>
                         <th><strong>Description</strong></th>
                         {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
                             <th><strong>Action</strong></th>
                         {% endif %}
                     </tr>
                 </thead>
+                
                 <tbody>
                     {% for project in projects.items %}
                         <tr>
@@ -33,7 +39,7 @@
                                 <!-- In your HTML template -->
                                 {% if session['user_id'] == 'ict' %}
                                     <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
-                                    <a href="{{ url_for('delete_project', proj_id=project.proj_id) }}" class="btn btn-danger">Delete</a>
+                                    <a href="#" onclick="confirmDelete('{{ project.proj_id }}')" class="btn btn-danger">Delete</a>
                                 {% elif session['user_id'] == 'operator' %}
                                     <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
                                 {% endif %}
@@ -43,15 +49,15 @@
                 </tbody>
             </table>
         </div>
-        
     </div>
+    <br>
 
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             {% if projects.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('view_projects', page=projects.prev_num, sort_by=sort_by, sort_order=sort_order, search_query=search_query) }}">Previous</a>
+                    <a class="page-link" href="{{ url_for('view_projects', page=projects.prev_num, search_query=search_query) }}">Previous</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -67,7 +73,7 @@
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('view_projects', page=num, sort_by=sort_by, sort_order=sort_order, search_query=search_query) }}">{{ num }}</a>
+                            <a class="page-link" href="{{ url_for('view_projects', page=num, search_query=search_query) }}">{{ num }}</a>
                         </li>
                     {% endif %}
                 {% else %}
@@ -79,7 +85,7 @@
 
             {% if projects.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('view_projects', page=projects.next_num, sort_by=sort_by, sort_order=sort_order, search_query=search_query) }}">Next</a>
+                    <a class="page-link" href="{{ url_for('view_projects', page=projects.next_num, search_query=search_query) }}">Next</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -88,4 +94,11 @@
             {% endif %}
         </ul>
     </nav>
+<script>
+    function confirmDelete() {
+        const confirmed = confirm("Are you sure you want to delete?");
+        return confirmed;
+    }
+    </script>
+
 {% endblock %}

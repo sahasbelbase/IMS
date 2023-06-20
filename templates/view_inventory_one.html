@@ -3,10 +3,10 @@
 {% block content %}
 
 <!-- Inventory Table -->
-<div class="container inventory-table text-center" style="display: flex; justify-content: center; text-align: center;">
-    <h1 class="d-flex justify-content-between">Inventory</h1>
-
+<div class="container inventory-table " style="display: flex; text-align: center;">
+ 
     <div class="container mt-5">
+        <h1>Inventory</h1>
         <hr>
         <div class="row mt-5">
             <div class="col-md-6 mb-4">
@@ -14,29 +14,29 @@
                     <div class="card-body">
                         <h4 class="card-title">Inventory ID: {{ inventory_item.inventory_id }}</h4>
                         <ul class="list-unstyled">
-                            <p><strong  style="text-align: center;">Project: </strong> {{ project.proj_name }}</p>
-                            <p><strong style="text-align: center;">Equipment :</strong> {{ inventory_item.equipment }}</p>
-                            <p><strong style="text-align: center;">Technical ID: </strong> {{ inventory_item.technical_id }}</p>
-                            <p><strong style="text-align: center;">Asset ID: </strong> {{ inventory_item.asset_id }}</p>
-                            <p><strong style="text-align: center;">Inventory Labeling: </strong> {{ inventory_item.inventory_labeling }}</p>
-                            <p><strong style="text-align: center;">Category: </strong> {{ inventory_item.category }}</p>
-                            <p><strong style="text-align: center;">Item: </strong> {{ inventory_item.item }}</p>
-                            <p><strong style="text-align: center;">Make: </strong> {{ inventory_item.make }}</p>
-                            <p><strong style="text-align: center;">Model: </strong> {{ inventory_item.model }}</p>
-                            <p><strong  style="text-align: center;">Serial Number: </strong> {{ inventory_item.serial_no }}</p>
-                            <p><strong  style="text-align: center;">Document Type: </strong> {{ inventory_item.document_type }}</p>
-                            <p><strong  style="text-align: center;">Document ID: </strong> {{ inventory_item.document_id }}</p>
-                            <p><strong style="text-align: center;">Acquisition Date: </strong> {{ inventory_item.acquisition_date }}</p>
-                            <p><strong style="text-align: center;">Amount: </strong> {{ inventory_item.amount }}</p>
-                            <p><strong style="text-align: center;">Exchange Rate: </strong> {{ inventory_item.exchange_rate }}</p>
-                            <p><strong style="text-align: center;">Amount in USD: </strong> {{ inventory_item.amount_in_usd }}</p>
-                            <p><strong style="text-align: center;">Warranty: </strong> {{ inventory_item.warranty }}</p>
-                            <p><strong style="text-align: center;">Location: </strong> {{ inventory_item.location }}</p>
-                            <p><strong style="text-align: center;">Remark: </strong> {{ inventory_item.remark }}</p>
-                            <p><strong style="text-align: center;">Custodian Name: </strong> {{ inventory_item.staff_personal.first_name }} {{ inventory_item.staff_personal.last_name }}</p>
-                            <p><strong style="text-align: center;">Status:</strong> {{ inventory_item.status }}</p>
-                            <p><strong style="text-align: center;">Internal Remark: </strong> {{ inventory_item.internal_remark }}</p>
-                            <p><strong style="text-align: center;" >Included in HQ: </strong> {{ inventory_item.included_in_hq }}</p>
+                            <p><strong >Project: </strong> {{ project.proj_name }}</p>
+                            <p><strong >Equipment :</strong> {{ inventory_item.equipment }}</p>
+                            <p><strong >Technical ID: </strong> {{ inventory_item.technical_id }}</p>
+                            <p><strong >Asset ID: </strong> {{ inventory_item.asset_id }}</p>
+                            <p><strong>Inventory Labeling: </strong> {{ inventory_item.inventory_labeling }}</p>
+                            <p><strong>Category: </strong> {{ inventory_item.category }}</p>
+                            <p><strong>Item: </strong> {{ inventory_item.item }}</p>
+                            <p><strong>Make: </strong> {{ inventory_item.make }}</p>
+                            <p><strong>Model: </strong> {{ inventory_item.model }}</p>
+                            <p><strong >Serial Number: </strong> {{ inventory_item.serial_no }}</p>
+                            <p><strong >Document Type: </strong> {{ inventory_item.document_type }}</p>
+                            <p><strong >Document ID: </strong> {{ inventory_item.document_id }}</p>
+                            <p><strong>Acquisition Date: </strong> {{ inventory_item.acquisition_date }}</p>
+                            <p><strong>Amount: </strong> {{ inventory_item.amount }}</p>
+                            <p><strong>Exchange Rate: </strong> {{ inventory_item.exchange_rate }}</p>
+                            <p><strong>Amount in USD: </strong> {{ inventory_item.amount_in_usd }}</p>
+                            <p><strong>Warranty: </strong> {{ inventory_item.warranty }}</p>
+                            <p><strong>Location: </strong> {{ inventory_item.location }}</p>
+                            <p><strong>Remark: </strong> {{ inventory_item.remark }}</p>
+                            <p><strong>Custodian Name: </strong> {{ inventory_item.staff_personal.first_name }} {{ inventory_item.staff_personal.last_name }}</p>
+                            <p><strong>Status:</strong> {{ inventory_item.status }}</p>
+                            <p><strong>Internal Remark: </strong> {{ inventory_item.internal_remark }}</p>
+                            <p><strong >Included in HQ: </strong> {{ inventory_item.included_in_hq }}</p>
                         </ul>
                     </div>
                 </div>
@@ -44,7 +44,14 @@
         </div>
         <a href="{{ url_for('view_inventory') }}" class="btn btn-primary" style="justify-content: left;">Back</a>&nbsp;&nbsp;
         {% if session['user_id'] == 'ict' %}
-        <a href="{{ url_for('delete_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-danger" style="justify-content: left;">Delete</a>&nbsp;&nbsp;
+        <a href="{{ url_for('delete_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-danger" style="justify-content: left;" onclick="return confirmDelete();">Delete</a>&nbsp;&nbsp;
+
+<script>
+  function confirmDelete() {
+    const confirmed = confirm("Are you sure you want to delete?");
+    return confirmed;
+  }
+</script>
         {% endif %}
         {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
             <a href="{{ url_for('update_inventory', inventory_id=inventory_item.inventory_id) }}" class="btn btn-secondary" style="justify-content: left;">Update</a>

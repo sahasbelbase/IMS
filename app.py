@@ -8,6 +8,7 @@ from functools import wraps
 from sqlalchemy import or_, func
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
+from sqlalchemy.orm import backref
 
 
 # Creating an instance of the Flask class
@@ -90,8 +91,7 @@ class StaffPersonalInfo(db.Model):
     emergency_contact_number = db.Column(db.String(256), nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
-    staff_official_info = db.relationship('StaffOfficialInfo', backref='official_info', uselist=False)
-
+    staff_official_info = db.relationship('StaffOfficialInfo', backref=backref('staff_personal', cascade='all, delete', uselist=False))
 
 class StaffOfficialInfo(db.Model):
     __tablename__ = 'staff_official_info'
@@ -110,7 +110,7 @@ class StaffOfficialInfo(db.Model):
     designation = db.Column(db.String(256), nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    staff_personal = db.relationship('StaffPersonalInfo', backref='staff_official', uselist=False)
+    history = db.relationship('StaffOfficialHistory', backref=backref('official_info', cascade='all, delete', uselist=False))
 
 class StaffOfficialHistory(db.Model):
     __tablename__ = 'staff_official_history'
@@ -129,7 +129,9 @@ class StaffOfficialHistory(db.Model):
     designation = db.Column(db.String(256), nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    staff_official = db.relationship('StaffOfficialInfo', backref='history', uselist=False)
+    staff_official = db.relationship('StaffOfficialInfo', backref=backref('history_entries', cascade='all, delete'))
+
+
 
 class Project(db.Model):
     __tablename__ = 'project'
@@ -231,9 +233,14 @@ def logout():
 def index():
     return render_template('index.html')
 
-@app.route('/error')
-def error():
-    return render_template('error.html')
+@app.route('/no_match_found')
+def no_match_found():
+    return render_template('no_match_found.html')
+
+
+@app.route('/sorry')
+def sorry():
+    return render_template('sorry.html')
 
 
 @app.route('/add_inventory', methods=['GET', 'POST'])
@@ -315,8 +322,6 @@ def add_inventory():
 
     return render_template('add_inventory.html', projects=projects, staff_members=staff_members)
 
-
-
 @app.route('/view_inventory')
 def view_inventory():
     sort = request.args.get('sort', 'inventory_id')
@@ -359,7 +364,11 @@ def view_inventory():
     inventory_paginate = query.paginate(page=page, per_page=per_page)
     inventory_items = inventory_paginate.items
 
-    return render_template('view_inventory.html', inventory_paginate=inventory_paginate, inventory_items=inventory_items, sort=sort, order=order, search_query=search_query)
+    if not inventory_items and search_query:
+        return render_template('no_match_found.html')
+    else:
+        return render_template('view_inventory.html', inventory_paginate=inventory_paginate, inventory_items=inventory_items, sort=sort, order=order, search_query=search_query)
+
 
 
 #view_inventory_one
@@ -539,16 +548,30 @@ def add_staff():
     return render_template('add_staff.html', projects=projects, staff_personal_info=None)
 
 
-@app.route('/view_staff')
+
+# Route for viewing staff members
+@app.route('/view_staff', methods=['GET', 'POST'])
 def view_staff():
     search_query = request.args.get('search_query', '')
     sort = request.args.get('sort', 'first_name')  # Default sorting by first name
     order = request.args.get('order', 'asc')  # Default order as ascending
 
+    
+
+    if request.method == 'POST':
+        search_query = request.form.get('search_query', '')
+
+        if not search_query:
+        # If the search query is empty, redirect to 'no_match_found' page
+         return redirect(url_for('no_match_found'))
+
     page = request.args.get('page', 1, type=int)
     per_page = 5  # Number of items per page
 
-    query = StaffOfficialInfo.query.join(StaffPersonalInfo)
+    # Create a session
+    db_session = db.session
+
+    query = db_session.query(StaffOfficialInfo).join(StaffPersonalInfo)
 
     if search_query:
         query = query.filter(
@@ -586,7 +609,12 @@ def view_staff():
 
     staffs = query.paginate(page=page, per_page=per_page)
 
+    if not staffs.items and search_query:
+        # If no matching staff records found and a search query was entered, redirect to the 'no_match_found' page
+        return redirect(url_for('no_match_found'))
+
     return render_template('view_staff.html', staffs=staffs, search_query=search_query, sort=sort, order=order)
+
 
 
 @app.route('/view_staff_one/<int:staff_personal_id>')
@@ -685,7 +713,7 @@ def update_staff(staff_personal_id):
             call_sign=staff_official_info.call_sign,
             un_index_number=staff_official_info.un_index_number,
             joining_date=staff_official_info.joining_date,
-            last_working_date=datetime.now().date().strftime("%Y-%m-%d"),
+            last_working_date=staff_official_info.last_working_date,
             contract_type=staff_official_info.contract_type,
             grade=staff_official_info.grade,
             designation=staff_official_info.designation
@@ -719,29 +747,31 @@ def official_history(staff_personal_id):
                            staff_official_info=staff_official_info, staff_official_history=staff_official_history,
                            project=project)
 
-
 @app.route('/delete_staff/<int:staff_personal_id>')
 @login_required
 def delete_staff(staff_personal_id):
-    # Check if the user has the ICT role
-    if session['user_id'] != 'ict':
-        # User does not have the required role, show an error message or redirect to an unauthorized page
-        return "Unauthorized access"
+    # Check if the user is logged in
+    if not is_user_logged_in():
+        # User is not logged in, redirect to the login page
+        return redirect(url_for('login'))
 
     staff_personal_info = StaffPersonalInfo.query.get_or_404(staff_personal_id)
 
     if staff_personal_info:
         staff_official_info = staff_personal_info.staff_official_info
         if staff_official_info:
-            # Update the foreign key reference in the attendance table to NULL
-            Attendance.query.filter_by(staff_personal_id=staff_personal_id).update({Attendance.staff_personal_id: None})
+            attendance_entries = Attendance.query.filter_by(staff_personal_id=staff_personal_id).all()
+            for attendance_entry in attendance_entries:
+                attendance_entry.staff_personal_id = None
 
-            db.session.delete(staff_official_info)
+            for item in staff_official_info:
+                db.session.delete(item)
 
         db.session.delete(staff_personal_info)
         db.session.commit()
 
     return redirect('/view_staff')
+
 
 @app.route('/add_projects', methods=['GET', 'POST'])
 @login_required
@@ -776,14 +806,11 @@ def add_projects():
     
     return render_template('add_projects.html')
 
-# Define the route for viewing projects
+
 @app.route('/view_projects')
 def view_projects():
     search_query = request.args.get('search_query', '')
-    sort_by = request.args.get('sort_by', 'proj_name')  # Default sort column is 'proj_name'
     sort_order = request.args.get('sort_order', 'asc')  # Default sort order is ascending
-    page = request.args.get('page', 1, type=int)
-    per_page = 5  # Number of items per page
 
     if search_query:
         # Perform the search query to filter the projects
@@ -792,30 +819,22 @@ def view_projects():
         # Retrieve all projects without filtering
         projects = Project.query
 
-    # Sort the projects based on the sort column and sort order
-    if sort_by == 'proj_name':
-        if sort_order == 'asc':
-            projects = projects.order_by(func.lower(Project.proj_name).asc())
-        else:
-            projects = projects.order_by(func.lower(Project.proj_name).desc())
-    elif sort_by == 'proj_id':
-        if sort_order == 'asc':
-            projects = projects.order_by(Project.proj_id.asc())
-        else:
-            projects = projects.order_by(Project.proj_id.desc())
-    elif sort_by == 'donor':
-        if sort_order == 'asc':
-            projects = projects.order_by(func.lower(Project.donor).asc())
-        else:
-            projects = projects.order_by(func.lower(Project.donor).desc())
+    # Sorting
+    if sort_order == 'asc':
+        projects = projects.order_by(Project.proj_name.asc())
+        next_sort_order = 'desc'  # Set the next sort order to descending
+    elif sort_order == 'desc':
+        projects = projects.order_by(Project.proj_name.desc())
+        next_sort_order = 'asc'  # Set the next sort order to ascending
 
-    # Paginate the sorted projects
-    projects = projects.paginate(page=page, per_page=per_page)
+    # Paginate the projects
+    projects = projects.paginate(per_page=5)
 
-    return render_template('view_projects.html', projects=projects, search_query=search_query, sort_by=sort_by, sort_order=sort_order)
+    if not search_query and not projects.total:
+        # If no matching project records found and a search query was entered, redirect to the 'no_match_found' page
+        return redirect(url_for('no_match_found'))
 
-
-
+    return render_template('view_projects.html', projects=projects, search_query=search_query, sort_order=sort_order, next_sort_order=next_sort_order)
 @app.route('/update_project/<int:proj_id>', methods=['GET', 'POST'])
 @login_required
 def update_project(proj_id):
