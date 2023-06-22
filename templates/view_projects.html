@@ -4,50 +4,54 @@
     <!-- Project Table -->
     <div class="row mt-5">
         <div class="col-12">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>
-                            <a href="{{ url_for('view_projects', search_query=search_query, sort_order=next_sort_order) }}">
-                                Project Name
-                                {% if sort_order == 'asc' %}
-                                    <i class="fas fa-sort-up"></i>
-                                {% elif sort_order == 'desc' %}
-                                    <i class="fas fa-sort-down"></i>
-                                {% else %}
-                                    <i class="fas fa-sort"></i>
-                                {% endif %}
-                            </a>
-                        </th>
-                        <th>Project ID</th>
-                        <th>Donor</th>
-                        <th><strong>Description</strong></th>
-                        {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
-                            <th><strong>Action</strong></th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {% for project in projects.items %}
+            {% if not search_query and projects.total == 0 %}
+                <p>No matching projects found.</p>
+            {% else %}
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td>{{ project.proj_name }}</td>
-                            <td>{{ project.proj_id }}</td>
-                            <td>{{ project.donor }}</td>
-                            <td>{{ project.description }}</td>
-                            <td>
-                                <!-- In your HTML template -->
-                                {% if session['user_id'] == 'ict' %}
-                                    <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
-                                    <a href="#" onclick="confirmDelete('{{ project.proj_id }}')" class="btn btn-danger">Delete</a>
-                                {% elif session['user_id'] == 'operator' %}
-                                    <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
-                                {% endif %}
-                            </td>
+                            <th>
+                                <a href="{{ url_for('view_projects', search_query=search_query, sort_order=next_sort_order) }}">
+                                    Project Name
+                                    {% if sort_order == 'asc' %}
+                                        <i class="fas fa-sort-up"></i>
+                                    {% elif sort_order == 'desc' %}
+                                        <i class="fas fa-sort-down"></i>
+                                    {% else %}
+                                        <i class="fas fa-sort"></i>
+                                    {% endif %}
+                                </a>
+                            </th>
+                            <th>Project ID</th>
+                            <th>Donor</th>
+                            <th><strong>Description</strong></th>
+                            {% if session['user_id'] == 'ict' or session['user_id'] == 'operator' %}
+                                <th><strong>Action</strong></th>
+                            {% endif %}
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                
+                    <tbody>
+                        {% for project in projects.items %}
+                            <tr>
+                                <td>{{ project.proj_name }}</td>
+                                <td>{{ project.proj_id }}</td>
+                                <td>{{ project.donor }}</td>
+                                <td>{{ project.description }}</td>
+                                <td>
+                                    <!-- In your HTML template -->
+                                    {% if session['user_id'] == 'ict' %}
+                                        <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
+                                        <a href="#" onclick="confirmDelete('{{ project.proj_id }}')" class="btn btn-danger">Delete</a>
+                                    {% elif session['user_id'] == 'operator' %}
+                                        <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
     </div>
     <br>
@@ -95,10 +99,10 @@
         </ul>
     </nav>
 <script>
-    function confirmDelete() {
-        const confirmed = confirm("Are you sure you want to delete?");
+    function confirmDelete(projectId) {
+        const confirmed = confirm("Are you sure you want to delete project " + projectId + "?");
         return confirmed;
     }
-    </script>
+</script>
 
 {% endblock %}

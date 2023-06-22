@@ -96,7 +96,7 @@
             <div class="search-form">
                 <form action="{{ url_for('view_inventory') }}" method="GET">
                     <div class="search-wrapper">
-                        <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search"> &nbsp;
+                        <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search" required> &nbsp;
                         <button class="search-button btn btn-outline-primary" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -122,7 +122,7 @@
         <div class="option">
             <form action="{{ url_for('view_staff') }}" method="get" class="search-form">
                 <div class="search-wrapper">
-                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search">&nbsp;
+                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search" required>&nbsp;
                     <button class="search-button btn btn-outline-primary" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -146,7 +146,7 @@
         <div class="option">
             <form action="{{ url_for('view_projects') }}" method="get" class="search-form">
                 <div class="search-wrapper">
-                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search"> &nbsp;
+                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search" required> &nbsp;
                     <button class="search-button btn btn-outline-primary" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -168,9 +168,9 @@
             <a href="{{ url_for('view_attendance') }}"><button class="button">View Attendance</button></a>
         </div>
         <div class="option">
-            <form action="{{ url_for('view_attendance') }}" method="get" class="search-form">
+            <form action="{{ url_for('search_attendance') }}" method="get" class="search-form">
                 <div class="search-wrapper">
-                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search"> &nbsp;
+                    <input class="search-input" type="search" name="search_query" placeholder="Search" aria-label="Search" required> &nbsp;
                     <button class="search-button btn btn-outline-primary" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -179,5 +179,6 @@
                 </div>
             </form>
         </div>
-    </div>&nbsp;&nbsp;
+    </div>
+    &nbsp;&nbsp;
 {% endblock %}

@@ -8,8 +8,30 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Attendance ID</th>
-                            <th>Staff Name</th>
+                            <th>
+                                <a href="{{ url_for('view_attendance', sort='latest') }}">
+                                    Attendance ID
+                                    {% if sort_param == 'latest' %}
+                                        {% if sort_order == desc %}
+                                            <i class="fas fa-sort-up"></i>
+                                        {% else %}
+                                            <i class="fas fa-sort-down"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                </a>
+                            </th>
+                            <th>
+                                <a href="{{ url_for('view_attendance', sort='name') }}">
+                                    Staff Name
+                                    {% if sort_param == 'name' %}
+                                        {% if sort_order == desc %}
+                                            <i class="fas fa-sort-up"></i>
+                                        {% else %}
+                                            <i class="fas fa-sort-down"></i>
+                                        {% endif %}
+                                    {% endif %}
+                                </a>
+                            </th>
                             <th>Leave Type</th>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -20,33 +42,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                            {% for attendance in attendances.items %}
+                        {% for attendance in attendances.items %}
                             <tr>
-                            <td>{{ attendance.att_id }}</td>
-                            <td>{{ attendance.staff_personal.first_name }} {{ attendance.staff_personal.last_name }}</td>
-                            <td>{{ attendance.leave_type }}</td>
-                            <td>{{ attendance.start_date }}</td>
-                            <td>{{ attendance.end_date }}</td>
-                            <td>{{ attendance.remarks|capitalize }}</td>
-                            {% if session['user_id'] == 'ict' %}
-                            <td>
-                                <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
-                                <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger" onclick="return confirmDelete()">Delete</a>
-                            </td>
-                            {% elif session['user_id'] == 'operator' %}
-                            <td>
-                                <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
-                            </td>
-                            {% endif %}
+                                <td>{{ attendance.att_id }}</td>
+                                <td>{{ attendance.staff_personal.first_name }} {{ attendance.staff_personal.last_name }}</td>
+                                <td>{{ attendance.leave_type }}</td>
+                                <td>{{ attendance.start_date }}</td>
+                                <td>{{ attendance.end_date }}</td>
+                                <td>{{ attendance.remarks|capitalize }}</td>
+                                {% if session['user_id'] == 'ict' %}
+                                    <td>
+                                        <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                                        <a href="{{ url_for('delete_attendance', att_id=attendance.att_id) }}" class="btn btn-danger" onclick="return confirmDelete()">Delete</a>
+                                    </td>
+                                {% elif session['user_id'] == 'operator' %}
+                                    <td>
+                                        <a href="{{ url_for('update_attendance', att_id=attendance.att_id) }}" class="btn btn-secondary">Update</a>
+                                    </td>
+                                {% endif %}
                             </tr>
-                            {% endfor %}
-                      </tbody>
-                      
-                      <script>
-                        function confirmDelete() {
-                          return confirm("Are you sure you want to delete?");
-                        }
-                      </script>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 <!-- Pagination links -->
                 <nav aria-label="Attendance pagination">
@@ -96,4 +112,11 @@
         </div>
         <a href="{{ url_for('index') }}" class="btn btn-primary" style="justify-content: left;">Home</a>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete?");
+        }
+    </script>
 {% endblock %}

@@ -110,16 +110,52 @@
         <option value="disposal">Disposal</option>
       </select>
     </div><br>
-    <button type="submit" class="btn btn-primary"  onclick="showPopup()">Submit</button>
-</form>
-</div>
+    <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
 
-
-</style>
 <script>
-  function showPopup() {
-      alert("Inventory Added");
-  }
+    function submitForm() {
+        var projId = document.getElementById('proj_id').value;
+        var equipment = document.getElementById('equipment').value;
+        var technicalId = document.getElementById('technical_id').value;
+        var assetId = document.getElementById('asset_id').value;
+        var inventoryLabeling = document.getElementById('inventory_labeling').value;
+        var category = document.getElementById('category').value;
+        var item = document.getElementById('item').value;
+        var model = document.getElementById('model').value;
+        var serialNo = document.getElementById('serial_no').value;
+        var acquisitionDate = document.getElementById('acquisition_date').value;
+        var amount = document.getElementById('amount').value;
+        var exchangeRate = document.getElementById('exchange_rate').value;
+        var amountInUSD = document.getElementById('amount_in_usd').value;
+        var includedInHQ = document.getElementById('included_in_hq').value;
+
+        // Perform validation based on your requirements
+        if (
+            projId === "" ||
+            equipment === "" ||
+            technicalId === "" ||
+            assetId === "" ||
+            inventoryLabeling === "" ||
+            category === "" ||
+            item === "" ||
+            model === "" ||
+            serialNo === "" ||
+            acquisitionDate === "" ||
+            amount === "" ||
+            exchangeRate === "" ||
+            amountInUSD === "" ||
+            includedInHQ === ""
+        ) {
+            // One or more required fields are empty
+            return;
+        }
+
+        showPopup();
+    }
+
+    function showPopup() {
+        alert("Inventory Added");
+    }
 </script>
 {% endblock %}
 

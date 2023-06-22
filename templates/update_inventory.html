@@ -113,12 +113,21 @@
         <option value="disposal" {% if inventory.included_in_hq == 'disposal' %}selected{% endif %}>Disposal</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary"  onclick="showPopup()">Submit</button>
+    <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
   </form>
 </div>
 <script>
+  function submitForm() {
+    var form = document.querySelector('form');
+    var isValid = form.checkValidity();
+
+    if (isValid) {
+      showPopup();
+    }
+  }
+
   function showPopup() {
-      alert("Inventory updated");
+    alert("Inventory updated");
   }
 </script>
 {% endblock %}

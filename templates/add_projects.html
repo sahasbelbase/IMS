@@ -25,31 +25,26 @@
         <option value="no">No</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary" onclick="showPopup()">Submit</button>
-  </form>
-
-</div>
+    <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
 
 <script>
-  // JavaScript to hide placeholder text when the input is focused
-  const inputs = document.querySelectorAll('input, textarea');
+    function submitForm() {
+        var projName = document.getElementById('proj_name').value;
+        var donor = document.getElementById('donor').value;
+        var description = document.getElementById('description').value;
+        var isActive = document.getElementById('is_active').value;
 
-  inputs.forEach((input) => {
-    const placeholderText = input.getAttribute('placeholder');
+        if (projName !== '' && donor !== '' && description !== '' && isActive !== '') {
+            showPopup();
+        } else {
+            // Add your own error handling logic here if needed
+            alert('Please fill in all the required fields.');
+        }
+    }
 
-    input.addEventListener('focus', () => {
-      input.setAttribute('placeholder', '');
-    });
-
-    input.addEventListener('blur', () => {
-      if (input.value === '') {
-        input.setAttribute('placeholder', placeholderText);
-      }
-    });
-  });
-
-  function showPopup() {
-      alert("Project Added")}
+    function showPopup() {
+        alert("Project Added");
+    }
 </script>
 
 {% endblock %}

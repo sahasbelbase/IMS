@@ -126,12 +126,46 @@
         </div>        
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" onclick="showPopup()">Submit</button>
-  </form>
-</div>
+    <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
+
 <script>
+    function submitForm() {
+        if (validateForm()) {
+            showPopup();
+        }
+    }
+
+    function validateForm() {
+        var requiredFields = [
+            'first_name',
+            'last_name',
+            'gender',
+            'dob',
+            'personal_email',
+            'contact_number',
+            'address',
+            'emergency_contact_number',
+            'proj_id',
+            'department',
+            'joining_date',
+            'contract_type',
+            'grade',
+            'designation'
+        ];
+
+        for (var i = 0; i < requiredFields.length; i++) {
+            var field = document.getElementById(requiredFields[i]);
+            if (field.value === '') {
+                return false; // Required field is empty
+            }
+        }
+
+        return true; // All required fields are filled
+    }
+
     function showPopup() {
         alert("Staff Added");
     }
 </script>
+
 {% endblock %}

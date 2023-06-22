@@ -109,13 +109,38 @@
     </div>
     
     <div class="form-group">
-      <button type="submit" class="btn btn-primary" onclick="showPopup()">Update</button>
+      <button type="submit" class="btn btn-primary" onclick="submitForm()">Update</button>
       <a class="btn btn-secondary" href="{{ url_for('view_staff_one', staff_personal_id=staff_personal_info.staff_personal_id) }}">Cancel</a>
     </div>
     
   </form>
 </div>
 <script>
+  function submitForm() {
+      var isValid = validateForm(); // Perform form validation
+
+      if (isValid) {
+          showPopup();
+      }
+  }
+
+  function validateForm() {
+      // Retrieve form values
+      var firstName = document.getElementById('first_name').value;
+      var lastName = document.getElementById('last_name').value;
+      // Add more variables for other required fields
+
+      // Perform validation checks
+      if (firstName === '' || lastName === '') {
+          // Display error message or perform other actions to indicate invalid form
+          return false;
+      }
+
+      // Add more validation checks for other required fields
+
+      return true; // Return true if all required fields are filled
+  }
+
   function showPopup() {
       alert("Staff Updated");
   }

@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask import url_for
 from functools import wraps
-from sqlalchemy import or_, func
+from sqlalchemy import asc, or_, desc
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 from sqlalchemy.orm import backref
@@ -815,6 +815,11 @@ def view_projects():
     if search_query:
         # Perform the search query to filter the projects
         projects = Project.query.filter(Project.proj_name.ilike(f'%{search_query}%'))
+
+        # If no matching project records found, redirect to the 'no_match_found' page
+        if not projects.count():
+            return redirect(url_for('no_match_found'))
+
     else:
         # Retrieve all projects without filtering
         projects = Project.query
@@ -830,11 +835,12 @@ def view_projects():
     # Paginate the projects
     projects = projects.paginate(per_page=5)
 
-    if not search_query and not projects.total:
-        # If no matching project records found and a search query was entered, redirect to the 'no_match_found' page
-        return redirect(url_for('no_match_found'))
-
     return render_template('view_projects.html', projects=projects, search_query=search_query, sort_order=sort_order, next_sort_order=next_sort_order)
+
+
+
+
+
 @app.route('/update_project/<int:proj_id>', methods=['GET', 'POST'])
 @login_required
 def update_project(proj_id):
@@ -930,25 +936,73 @@ def add_attendance():
     # Render the template
     return render_template('add_attendance.html', staff_personal_infos=staff_personal_infos)
 
-# Update attendance
-
-@app.route('/view_attendance')
+@app.route('/view_attendance', methods=['GET'])
+@login_required
 def view_attendance():
-    page = request.args.get('page', 1, type=int)
-    per_page = 5  # Number of items per page
-    search_query = request.args.get('search')
+    # Check if the user has the ICT or Operator role
+    if session['user_id'] not in ['ict', 'operator']:
+        # User does not have the required role, show an error message or redirect to an unauthorized page
+        return "Unauthorized access"
 
-    if search_query:
-        # Perform the search query to filter the attendance records
-        attendances = Attendance.query.join(StaffPersonalInfo).filter(
-            (Attendance.staff_personal_id == StaffPersonalInfo.staff_personal_id) &
-            (StaffPersonalInfo.name.ilike(f'%{search_query}%'))
-        ).order_by(Attendance.att_id.desc()).paginate(page=page, per_page=per_page)
+    # Get the sorting parameter from the request query parameters
+    sort_param = request.args.get('sort', 'latest')
+
+    # Set the default sorting column and order
+    sort_column = Attendance.start_date
+    sort_order = desc
+
+    if sort_param == 'name':
+        # Sort by staff's first name
+        sort_column = StaffPersonalInfo.first_name
+        if 'sort_order' in session and session['sort_order'] == 'asc':
+            # Toggle the sorting order if 'sort_order' session variable exists and is set to 'asc'
+            sort_order = desc
+            session['sort_order'] = 'desc'
+        else:
+            sort_order = asc
+            session['sort_order'] = 'asc'
     else:
-        # Retrieve all attendance records without filtering
-        attendances = Attendance.query.order_by(Attendance.att_id.desc()).paginate(page=page, per_page=per_page)
+        # Reset the sorting order if the sorting parameter is not 'name'
+        if 'sort_order' in session:
+            del session['sort_order']
 
-    return render_template('view_attendance.html', attendances=attendances, search_query=search_query)
+    # Query all attendances with the desired sorting
+    attendances = Attendance.query.join(StaffPersonalInfo).order_by(sort_order(sort_column)).paginate(page=1, per_page=10)
+
+    # Render the template with the attendances
+    return render_template('view_attendance.html', attendances=attendances)
+
+
+@app.route('/search_attendance', methods=['GET'])
+@login_required
+def search_attendance():
+    # Check if the user has the ICT or Operator role
+    if session['user_id'] not in ['ict', 'operator']:
+        # User does not have the required role, show an error message or redirect to an unauthorized page
+        return "Unauthorized access"
+
+    search_query = request.args.get('search_query', '')
+
+    if not search_query:
+        # Empty search query, redirect to the 'no_match_found' page
+        return redirect('/no_match_found')
+
+    # Query the attendances with the desired search
+    attendances = Attendance.query.join(StaffPersonalInfo).filter(
+        or_(
+            StaffPersonalInfo.first_name.ilike(f'%{search_query}%'),
+            StaffPersonalInfo.last_name.ilike(f'%{search_query}%')
+        )
+    ).paginate(page=1, per_page=10)
+
+    # Render the template with the attendances and search query
+    if attendances.total == 0:
+        # No matches found, redirect to the 'no_match_found' page
+        return redirect('/no_match_found')
+    else:
+        return render_template('view_attendance.html', attendances=attendances, search_query=search_query)
+
+
 
 
 @app.route('/update_attendance/<int:att_id>', methods=['GET', 'POST'])

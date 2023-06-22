@@ -36,19 +36,26 @@
             <label for="remarks">Remarks:</label>
             <input type="text" class="form-control" id="remarks" name="remarks" required placeholder="Enter remarks">
         </div>
-        <button type="submit" class="btn btn-primary"  onclick="showPopup()">Submit</button>
-</form>
-</div>
+        <button type="submit" class="btn btn-primary" onclick="submitForm()">Submit</button>
 
-<style>
-  .btn-custom {
-    background-color: rgb(81, 178, 250);
-    color: white;
-  }
-</style>
 <script>
+    function submitForm() {
+        var staffPersonalId = document.getElementById('staff_personal_id').value;
+        var leaveType = document.getElementById('leave_type').value;
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+        var remarks = document.getElementById('remarks').value;
+
+        if (staffPersonalId && leaveType && startDate && endDate && remarks) {
+            showPopup();
+        } else {
+            alert("Please fill in all the required fields.");
+        }
+    }
+
     function showPopup() {
         alert("Attendance Added");
     }
 </script>
+
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h1 style="text-align: center;">Update Attendance</h1>
-    <form method="POST" action="{{ url_for('update_attendance', att_id=attendance.att_id) }}">
+    <form method="POST" action="{{ url_for('update_attendance', att_id=attendance.att_id) }}" onsubmit="return validateForm()">
         <div class="form-group">
             <label for="staff_personal_id">Staff Name:</label>
             <select class="form-control" id="staff_personal_id" name="staff_personal_id" required>
@@ -34,12 +34,28 @@
             <label for="remarks">Remarks:</label>
             <input type="text" class="form-control" id="remarks" name="remarks" value="{{ attendance.remarks }}" required>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="showPopup()">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button>
         <a href="{{ url_for('view_attendance') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 
 <script>
+    function validateForm() {
+        var staffPersonalId = document.getElementById('staff_personal_id').value;
+        var leaveType = document.getElementById('leave_type').value;
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+        var remarks = document.getElementById('remarks').value;
+
+        if (staffPersonalId === '' || leaveType === '' || startDate === '' || endDate === '' || remarks === '') {
+            alert("Please fill in all the required fields.");
+            return false;
+        }
+
+        showPopup();
+        return true;
+    }
+
     function showPopup() {
         alert("Attendance updated");
     }
