@@ -60,7 +60,7 @@ class Inventory(db.Model):
     item = db.Column(db.String(256), nullable=False)
     make = db.Column(db.String(256), nullable=False)
     model = db.Column(db.String(256), nullable=False)
-    serial_no = db.Column(db.String(256), nullable=False)
+    serial_no = db.Column(db.String(256), nullable=False, unique=True)
     document_type = db.Column(db.String(256), nullable=False)
     document_id = db.Column(db.String(256), nullable=False)
     acquisition_date = db.Column(db.Date, nullable=False)
@@ -84,8 +84,8 @@ class StaffPersonalInfo(db.Model):
     photo_filename = db.Column(db.String(256), nullable=True)
     gender = db.Column(db.String(256), nullable=False)
     dob = db.Column(db.String(256), nullable=False)
-    contact_number = db.Column(db.String(256), nullable=False)
-    personal_email = db.Column(db.String(256), nullable=False)
+    contact_number = db.Column(db.String(256), nullable=False, unique=True)
+    personal_email = db.Column(db.String(256), nullable=False, unique=True)
     address = db.Column(db.String(256), nullable=False)
     disability_type = db.Column(db.String(256), nullable=False)
     emergency_contact_number = db.Column(db.String(256), nullable=False)
@@ -119,7 +119,7 @@ class StaffOfficialHistory(db.Model):
     proj_id = db.Column(db.Integer, db.ForeignKey('project.proj_id'))
     project = db.relationship('Project', backref='staff_history')
     department = db.Column(db.String(256), nullable=False)
-    work_email = db.Column(db.String(256), nullable=False)
+    work_email = db.Column(db.String(256), nullable=False, unique=True)
     call_sign = db.Column(db.String(256), nullable=False)
     un_index_number = db.Column(db.String(256), nullable=False)
     joining_date = db.Column(db.Date)  # Add the joining_date column here
@@ -237,12 +237,6 @@ def index():
 def no_match_found():
     return render_template('no_match_found.html')
 
-
-@app.route('/sorry')
-def sorry():
-    return render_template('sorry.html')
-
-
 @app.route('/add_inventory', methods=['GET', 'POST'])
 @login_required
 def add_inventory():
@@ -254,15 +248,15 @@ def add_inventory():
     if request.method == 'POST':
         # Process the form submission
         proj_id = int(request.form['proj_id'])
-        equipment = request.form['equipment']
+        equipment = request.form['equipment'].capitalize()
         technical_id = request.form['technical_id']
         asset_id = request.form['asset_id']
         inventory_labeling = request.form['inventory_labeling']
-        category = request.form['category']
+        category = request.form['category'].capitalize()
         item = request.form['item']
         staff_personal_id = int(request.form['staff'])
         staff = StaffPersonalInfo.query.get(staff_personal_id)
-        make = request.form['make']
+        make = request.form['make'].capitalize()
         model = request.form['model']
         serial_no = request.form['serial_no']
         document_type = request.form['document_type']
@@ -272,11 +266,11 @@ def add_inventory():
         exchange_rate = float(request.form['exchange_rate'])
         amount_in_usd = float(request.form['amount_in_usd'])
         warranty = request.form['warranty']
-        location = request.form['location']
-        remark = request.form['remark']
-        status = request.form['status']
-        internal_remark = request.form['internal_remark']
-        included_in_hq = request.form['included_in_hq']
+        location = request.form['location'].capitalize()
+        remark = request.form['remark'].capitalize()
+        status = request.form['status'].capitalize()
+        internal_remark = request.form['internal_remark'].capitalize()
+        included_in_hq = request.form['included_in_hq'].capitalize()
 
         # Check if the project ID exists in the Project table
         project = Project.query.filter_by(proj_id=proj_id).first()
@@ -396,7 +390,7 @@ def update_inventory(inventory_id):
 
     if request.method == 'POST':
         inventory.proj_id = request.form['proj_id']
-        inventory.equipment = request.form['equipment']
+        inventory.equipment = request.form['equipment'].capitalize()
         inventory.technical_id = request.form['technical_id']
         inventory.asset_id = request.form['asset_id']
         inventory.inventory_labeling = request.form['inventory_labeling']
@@ -408,19 +402,19 @@ def update_inventory(inventory_id):
             inventory.staff_personal_id = int(staff_personal_id)
             inventory.staff_personal = StaffPersonalInfo.query.get(inventory.staff_personal_id)
         
-        inventory.make = request.form['make']
+        inventory.make = request.form['make'].capitalize()
         inventory.model = request.form['model']
         inventory.serial_no = request.form['serial_no']
-        inventory.document_type = request.form['document_type']
+        inventory.document_type = request.form['document_type'].capitalize()
         inventory.document_id = request.form['document_id']
         inventory.acquisition_date = request.form['acquisition_date']
         inventory.amount = request.form['amount']
         inventory.exchange_rate = request.form['exchange_rate']
         inventory.amount_in_usd = request.form['amount_in_usd']
         inventory.warranty = request.form['warranty']
-        inventory.location = request.form['location']
-        inventory.remark = request.form['remark']
-        inventory.status = request.form['status']
+        inventory.location = request.form['location'].capitalize()
+        inventory.remark = request.form['remark'].capitalize()
+        inventory.status = request.form['status'].capitalize()
         inventory.internal_remark = request.form['internal_remark']
         inventory.included_in_hq = request.form['included_in_hq']
 
@@ -464,15 +458,15 @@ def add_staff():
         dob = request.form['dob']
         contact_number = request.form['contact_number']
         personal_email = request.form['personal_email']
-        address = request.form['address']
-        disability_type = request.form['disability_type']
+        address = request.form['address'].capitalize()
+        disability_type = request.form['disability_type'].capitalize()
         emergency_contact_number = request.form['emergency_contact_number']
-        department = request.form['department']
+        department = request.form['department'].capitalize()
         work_email = request.form['work_email']
         call_sign = request.form['call_sign']
         un_index_number = request.form['un_index_number']
         joining_date = request.form['joining_date']
-        contract_type = request.form['contract_type']
+        contract_type = request.form['contract_type'].capitalize()
         grade = request.form['grade']
         designation = request.form['designation']
 
@@ -663,17 +657,17 @@ def update_staff(staff_personal_id):
         # Update staff personal info
         staff_personal_info.first_name = request.form['first_name'].capitalize()
         staff_personal_info.last_name = request.form['last_name'].capitalize()
-        staff_personal_info.gender = request.form['gender']
+        staff_personal_info.gender = request.form['gender'].capitalize()
         staff_personal_info.dob = request.form['dob']
         staff_personal_info.contact_number = request.form['contact_number']
         staff_personal_info.personal_email = request.form['personal_email']
-        staff_personal_info.address = request.form['address']
-        staff_personal_info.disability_type = request.form['disability_type']
+        staff_personal_info.address = request.form['address'].capitalize()
+        staff_personal_info.disability_type = request.form['disability_type'].capitalize()
         staff_personal_info.emergency_contact_number = request.form['emergency_contact_number']
 
         # Update staff official info
         staff_official_info.staff_official_id = request.form['staff_official_id']
-        staff_official_info.department = request.form['department']
+        staff_official_info.department = request.form['department'].capitalize()
         staff_official_info.work_email = request.form['work_email']
         staff_official_info.call_sign = request.form['call_sign']
         staff_official_info.un_index_number = request.form['un_index_number']
@@ -685,7 +679,7 @@ def update_staff(staff_personal_id):
             staff_official_info.last_working_date = None
         staff_official_info.contract_type = request.form['contract_type']
         staff_official_info.grade = request.form['grade']
-        staff_official_info.designation = request.form['designation']
+        staff_official_info.designation = request.form['designation'].capitalize()
 
         # Update project name
         project_id = request.form['proj_id']
@@ -785,8 +779,8 @@ def add_projects():
     if request.method == 'POST':
         # Extract the data from the form
         proj_name = request.form['proj_name'].capitalize()
-        donor = request.form['donor']
-        description = request.form['description']
+        donor = request.form['donor'].capitalize()
+        description = request.form['description'].capitalize()
         is_active = request.form['is_active']
         
         # Create a new Project object with the extracted data
