@@ -148,7 +148,11 @@ class Attendance(db.Model):
     __tablename__ = 'attendance'
 
     att_id = db.Column(db.Integer, primary_key=True)
-    staff_personal_id = db.Column(db.Integer, db.ForeignKey('staff_personal_info.staff_personal_id'), nullable=False)
+    staff_personal_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('staff_personal_info.staff_personal_id', ondelete='CASCADE'), 
+        nullable=False
+    )
     leave_type = db.Column(db.String(50))
     start_date = db.Column(db.Date)
     end_date = db.Column(db.Date)
@@ -752,14 +756,9 @@ def delete_staff(staff_personal_id):
     staff_personal_info = StaffPersonalInfo.query.get_or_404(staff_personal_id)
 
     if staff_personal_info:
-        staff_official_info = staff_personal_info.staff_official_info
-        if staff_official_info:
-            attendance_entries = Attendance.query.filter_by(staff_personal_id=staff_personal_id).all()
-            for attendance_entry in attendance_entries:
-                attendance_entry.staff_personal_id = None
-
-            for item in staff_official_info:
-                db.session.delete(item)
+        attendance_entries = Attendance.query.filter_by(staff_personal_id=staff_personal_id).all()
+        for attendance_entry in attendance_entries:
+            db.session.delete(attendance_entry)
 
         db.session.delete(staff_personal_info)
         db.session.commit()
@@ -859,21 +858,23 @@ def update_project(proj_id):
     return render_template('update_projects.html', project=project)
 
 
-@app.route('/delete_projects/<int:proj_id>', methods=['GET', 'POST'])
+@app.route('/delete_project/<int:proj_id>', methods=['GET', 'POST'])
 @login_required
 def delete_project(proj_id):
-    
     # Check if the user has the ICT role
     if session['user_id'] != 'ict':
         # User does not have the required role, show an error message or redirect to an unauthorized page
         return "Unauthorized access"
+
     project = Project.query.get_or_404(proj_id)
 
-    # Delete the project
-    db.session.delete(project)
-    db.session.commit()
+    if project:
+        # Delete the project
+        db.session.delete(project)
+        db.session.commit()
 
     return redirect('/view_projects')
+
 
 
 # Define the route for adding attendance

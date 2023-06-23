@@ -43,6 +43,7 @@
                                     {% if session['user_id'] == 'ict' %}
                                         <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
                                         <a href="#" onclick="confirmDelete('{{ project.proj_id }}')" class="btn btn-danger">Delete</a>
+
                                     {% elif session['user_id'] == 'operator' %}
                                         <a href="{{ url_for('update_project', proj_id=project.proj_id) }}" class="btn btn-secondary">Update</a>
                                     {% endif %}
@@ -98,11 +99,12 @@
             {% endif %}
         </ul>
     </nav>
-<script>
-    function confirmDelete(projectId) {
-        const confirmed = confirm("Are you sure you want to delete project " + projectId + "?");
-        return confirmed;
-    }
-</script>
-
+    <script>
+        function confirmDelete(projectId) {
+            const confirmed = confirm("Are you sure you want to delete project " + projectId + "?");
+            if (confirmed) {
+                window.location.href = "/delete_project/" + projectId;
+            }
+        }
+        </script>
 {% endblock %}
